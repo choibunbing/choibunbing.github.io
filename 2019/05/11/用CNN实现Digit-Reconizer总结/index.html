@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="背景简介&amp;emsp;&amp;emsp;本文实现的是Kaggle竞赛平台上Getting Started级别的Digit Reconizer（即MNIST）。使用Tensorflow搭建了5层卷积神经网络（Convolutional Neural Network，简称CNN），最终取得测试成绩是0.98742。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用CNN实现Digit Reconizer总结">
+<meta property="og:url" content="https://choibunbing.com/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Milo研究中心">
+<meta property="og:description" content="背景简介&amp;emsp;&amp;emsp;本文实现的是Kaggle竞赛平台上Getting Started级别的Digit Reconizer（即MNIST）。使用Tensorflow搭建了5层卷积神经网络（Convolutional Neural Network，简称CNN），最终取得测试成绩是0.98742。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-11T01:11:03.000Z">
+<meta property="article:modified_time" content="2020-05-30T07:07:25.023Z">
+<meta property="article:author" content="Milo Choi">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Tensorflow">
+<meta property="article:tag" content="CNN">
+<meta property="article:tag" content="Kaggle">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://choibunbing.com/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>用CNN实现Digit Reconizer总结 | Milo研究中心</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Milo研究中心</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">往者不可諫，來者猶可追。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://choibunbing.com/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Milo Choi"/>
+      <meta itemprop="description" content=""/>
+      <meta itemprop="image" content="/images/avatar.gif"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Milo研究中心"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">用CNN实现Digit Reconizer总结
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-11 09:11:03" itemprop="dateCreated datePublished" datetime="2019-05-11T09:11:03+08:00">2019-05-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-05-30 15:07:25" itemprop="dateModified" datetime="2020-05-30T15:07:25+08:00">2020-05-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="背景简介"><a href="#背景简介" class="headerlink" title="背景简介"></a>背景简介</h4><p>&emsp;&emsp;本文实现的是Kaggle竞赛平台上Getting Started级别的Digit Reconizer（即MNIST）。使用Tensorflow搭建了5层卷积神经网络（Convolutional Neural Network，简称CNN），最终取得测试成绩是0.98742。</p>
+<a id="more"></a>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><ul>
+<li>导入相关的包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;本文使用了numpy，pandas，scikit-learn，以及tensorflow包。其中numpy主要用于处理数据格式；pandas主要用于读写文件；使用scikit-learn包进行One-Hot格式处理；Tensorflow负责CNN的搭建及运行。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong> 未进行数据可视化和数据清理工作。</p>
+<ul>
+<li>读取数据，并查看内容</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 读取训练集</span><br><span class="line">train &#x3D; pd.read_csv(&quot;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;train.csv&quot;)</span><br><span class="line"># 读取测试集</span><br><span class="line">test &#x3D; pd.read_csv(&quot;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;test.csv&quot;)</span><br><span class="line"></span><br><span class="line"># shape:(42000,785)</span><br><span class="line">train_df &#x3D; train.copy()</span><br><span class="line">test_df &#x3D; test.copy()</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;首先使用pandas的read_csv()方法读取训练集和测试集，然后通过describe()和info()方法查看训练集的格式为(42000,785)，其中第一列为训练集标签（即Label）,剩余784列是手写图像的数据（因为图片大小是28*28）。</p>
+<p>&emsp;&emsp;使用了copy()方法的初衷是防止未来操作修改了原始数据。后来经查阅相关资料发现Python中存在引用（=）、浅拷贝（copy()）、深拷贝的差别（deepcopy()）。正确的应该是使用deepcopy()对原始数据进行深拷贝，这样Python会重新创建一个对象，对新对象的任何修改都不会影响到原始对象。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong> copy()方法使用错误，应该使用deepcopy()方法。</p>
+<ul>
+<li>格式化数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 根据需求格式化训练集</span><br><span class="line"># x_train.shape -&gt;  (42000, 784)</span><br><span class="line">x_train &#x3D; train_df.drop([&#39;label&#39;], axis&#x3D;1).values.reshape([-1, 784]).astype(np.float32)</span><br><span class="line"># y_train.shape -&gt;  (42000, 1)</span><br><span class="line"># y_train[0]    -&gt;  [1.]</span><br><span class="line">y_train &#x3D; train_df[&#39;label&#39;].values.reshape([-1, 1]).astype(np.float32)</span><br><span class="line"></span><br><span class="line"># one-hot using scikit-learn</span><br><span class="line"># onehot_encoded.shape -&gt; (42000, 10)</span><br><span class="line"># onehot_encoded[0] -&gt;  [0. 1. 0. 0. 0. 0. 0. 0. 0. 0.]</span><br><span class="line">onehot_encoded &#x3D; OneHotEncoder(sparse&#x3D;False).fit_transform(y_train)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;格式化数据时应该注意以下几点：</p>
+<p>&emsp;&emsp;0. 格式化要和占位符的格式匹配，否则喂数据的时候会出错。</p>
+<p>&emsp;&emsp;1. 数据类型需要是float32或者float64，实验中报错提示的信息，具体为什么暂时没研究。</p>
+<p>&emsp;&emsp;2. 训练集标签（Label），即此处的y_train，需要做One-Hot处理。此处采用scikit-learn包装的方法。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 刚入门，对数据格式没有足够的重视，实验中发现它是最重要的环节之一！</p>
+<p>&emsp;&emsp;1. 实际上代码的正确顺序应该是先写占位符，再根据占位符的shape进行训练集数据的格式化工作。</p>
+<p>&emsp;&emsp;2. One-Hot算法有多种实现方式，其一是自定义实现；其二是scikit-learn包；其三Tensorflow包也提供算法支持。未来要有能力对One-Hot算法信手拈来。</p>
+<p>&emsp;&emsp;3. 对数据格式认识不足，其实还有更简便的格式化方式，例如，x_train=train_df.iloc[:, 1:].values一步到位。</p>
+<ul>
+<li>定义占位符，喂数据时使用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 占位符</span><br><span class="line">x_ &#x3D; tf.placeholder(dtype&#x3D;tf.float32, shape&#x3D;[None, 784])</span><br><span class="line">y_ &#x3D; tf.placeholder(dtype&#x3D;tf.float32, shape&#x3D;[None, 10])</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;要注意的是，占位符的shape要和喂神经网络的数据格式匹配。</p>
+<p>&emsp;&emsp;<strong>经验：</strong> （若你和Milo一样曾经研究方向是分布式）可以把神经网络当成一个分布式系统，作业被分成许多个基本任务shuffle到各个节点上。其实，基本任务就是确定\(f(x) = wx + b\)的参数，此处参数不是向量，而节点就是一个个神经元。输入和输出有多少个节点，就有多少个任务，也就确定了向量的维度。</p>
+<ul>
+<li>定义神经网络的基本单元</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;&quot;</span><br><span class="line">定义变量</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def weight(shape):</span><br><span class="line">    return tf.Variable(tf.truncated_normal(shape, stddev&#x3D;0.1))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def bias(shape):</span><br><span class="line">    return tf.Variable(tf.constant(0.1, shape&#x3D;shape))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">定义层</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def conf2d(x, w):</span><br><span class="line">    return tf.nn.conv2d(x, w, strides&#x3D;[1, 1, 1, 1], padding&#x3D;&#39;SAME&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def max_pool(x):</span><br><span class="line">    return tf.nn.max_pool(x, ksize&#x3D;[1, 2, 2, 1], strides&#x3D;[1, 2, 2, 1], padding&#x3D;&#39;SAME&#39;)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;此处Milo定义了权重、偏置、卷积层以及Max Pooling层，其中偏置项取常量0.1；卷基层的步伐是1，填充方式为SAME；Max Pooling层核大小是2*2，步伐为2，填充方式同样是SAME。</p>
+<p>&emsp;&emsp;这里有必要解释一下卷积层输出大小的计算：</p>
+<p>&emsp;&emsp;1. 教科书上，以及视频教程手推卷积层大小公式为：\(f(x) = \frac{Input - Filter + 2 * Padding}{Stride} + 1\)</p>
+<p>&emsp;&emsp;2. Tensorflow中,SAME填充方式的卷积层输出大小计算公式为：\(f(x) = \lceil \frac{W}{Stride} \rceil\)，跟Filter和Padding没半毛钱关系.</p>
+<p>&emsp;&emsp;3. Tensorflow中,VALID填充方式的卷积层输出大小计算公式为：\(f(x) = \lceil \frac{W - Filter + 1}{Stride} \rceil\)</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 起初写代码的时候完全没考虑重构。在没定义神经网络的基本单元的时候，整段代码乱成一锅粥，十分不利于代码调试，同时也阻碍对神经网络模型的理解。所以，<font color='red'><code>强烈建议进行重构工作！</code></font></p>
+<p>&emsp;&emsp;1. 计算输出输出格式不熟练。根据卷积层和Max Pooling层的参数，需要提前规划神经网络模型中每一层的大小，正确计算每一层的输出，否则将会出现意想不到的惊（yi）喜（chang）。</p>
+<ul>
+<li>定义神经网络模型</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># SAME:输出大小等于输入大小除以步长向上取整，s是步长大小；</span><br><span class="line"># VALID:输出大小等于输入大小减去滤波器大小加上1，最后再除以步长（f为滤波器的大小，s是步长大小）。</span><br><span class="line"># 第一层 28*28*1 -&gt; 14*14*32</span><br><span class="line">x_images &#x3D; tf.reshape(x_, [-1, 28, 28, 1])</span><br><span class="line">w_conv1 &#x3D; weight([5, 5, 1, 32])</span><br><span class="line">b_conv1 &#x3D; bias([32])</span><br><span class="line">h_1 &#x3D; tf.nn.sigmoid(conf2d(x_images, w_conv1) + b_conv1)</span><br><span class="line">p_1 &#x3D; max_pool(h_1)</span><br><span class="line"># 第二层 14*14*32 -&gt; 7*7*64</span><br><span class="line">w_conv2 &#x3D; weight([5, 5, 32, 64])</span><br><span class="line">b_conv2 &#x3D; bias([64])</span><br><span class="line">h_2 &#x3D; tf.nn.sigmoid(conf2d(p_1, w_conv2) + b_conv2)</span><br><span class="line">p_2 &#x3D; max_pool(h_2)</span><br><span class="line"># 第三层 7*7*64 -&gt; 4*4*128</span><br><span class="line">w_conv3 &#x3D; weight([5, 5, 64, 128])</span><br><span class="line">b_conv3 &#x3D; bias([128])</span><br><span class="line">h_3 &#x3D; tf.nn.sigmoid(conf2d(p_2, w_conv3) + b_conv3)</span><br><span class="line">p_3 &#x3D; max_pool(h_3)</span><br><span class="line"># 第四层 4*4*128 -&gt; 1*1024</span><br><span class="line">w_fc1 &#x3D; weight([4 * 4 * 128, 1024])</span><br><span class="line">b_fc1 &#x3D; bias([1024])</span><br><span class="line">h_fc1 &#x3D; tf.nn.sigmoid(tf.matmul(tf.reshape(p_3, [-1, 4 * 4 * 128]), w_fc1) + b_fc1)</span><br><span class="line"># 第五层 1*1024 -&gt; 1*10</span><br><span class="line">w_fc2 &#x3D; weight([1024, 10])</span><br><span class="line">b_fc2 &#x3D; bias([10])</span><br><span class="line">y_conv &#x3D; tf.matmul(h_fc1, w_fc2) + b_fc2</span><br><span class="line"># tf.nn.softmax_cross_entropy_with_logits做了softmax和交叉熵</span><br><span class="line">prediction &#x3D; tf.nn.softmax(tf.matmul(h_fc1, w_fc2) + b_fc2)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<strong>经验：</strong></p>
+<p>&emsp;&emsp;0. 卷积核的深度需要是2的N次幂。（他人经验借鉴）</p>
+<p>&emsp;&emsp;1. tf.reshape()的维度参数中，-1表示不定义张量的维度。第一层中张量的维度将被reshape为42000维。</p>
+<p>&emsp;&emsp;2. 每一层中做的操作包括：图片信息和权重w做卷积操作 —&gt; 卷积结果加上偏置项做激活操作 —&gt; 经过激活函数的结果进行Pooling操作。</p>
+<p>&emsp;&emsp;3. 预测时，只关心softmax结果，所以图片数据直接喂prediction即可。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 没有重构成独立的模块。最初抽象成独立模块的时候，Milo对输入数据的格式定义不熟悉，出现了各种异常，所以决定拆开，优先确保程序成功运行。</p>
+<p>&emsp;&emsp;1. 对最后全连接的定义不清晰。究竟什么时候开始全连接？</p>
+<ul>
+<li>定义结果需要使用的数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># cross_entropy &#x3D; -tf.reduce_sum(y_ * tf.log(y_conv))</span><br><span class="line">loss &#x3D; tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels&#x3D;y_, logits&#x3D;y_conv))</span><br><span class="line">train_step &#x3D; tf.train.GradientDescentOptimizer(learning_rate&#x3D;0.1).minimize(loss)</span><br><span class="line">correct_prediction &#x3D; tf.equal(tf.argmax(y_conv, axis&#x3D;1), tf.argmax(y_, axis&#x3D;1))</span><br><span class="line">accuracy &#x3D; tf.reduce_mean(tf.cast(correct_prediction, dtype&#x3D;tf.float32))</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;0. 训练过程是要是损失函数取最小值，此处是对<font color = 'red'><strong>softmax</strong></font>结果做<font color = 'red'><strong>交叉熵</strong></font>，然后进行<font color = 'red'><strong>均值降维</strong></font>。</p>
+<p>&emsp;&emsp;1. 精度计算是对比<font color = 'red'><strong>训练集标签</strong></font>和<font color = 'red'><strong>实际标签</strong></font>。</p>
+<ul>
+<li>题外话</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># batch</span><br><span class="line"># no batch cause: CUDNN_STATUS_INTERNAL_ERROR</span><br><span class="line"># The value of a feed cannot be a tf.Tensor object.</span><br><span class="line"># (&quot;shuffle_batch:0&quot;, shape&#x3D;(100, 42000, 784), dtype&#x3D;float32)</span><br><span class="line"># (&quot;Placeholder:0&quot;, shape&#x3D;(?, 784), dtype&#x3D;float32).</span><br><span class="line"># images, labels &#x3D; tf.train.shuffle_batch([x_train, onehot_encoded],</span><br><span class="line">#                                         batch_size&#x3D;100,</span><br><span class="line">#                                         num_threads&#x3D;6,</span><br><span class="line">#                                         capacity&#x3D;int(50000 * 0.4 + 3 * 100),</span><br><span class="line">#                                         min_after_dequeue&#x3D;1000</span><br><span class="line">#                                         )</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<strong>经验：</strong></p>
+<p>&emsp;&emsp;0. 在训练神经网络模型的时候出现OOM的情况，想使用tf.train.shuffle_batch分批处理，结果出现异常：”The value of a feed cannot be a tf.Tensor object.”。</p>
+<p>&emsp;&emsp;1. 神经网络模型的输入和输出一定刚要和喂的数据维度相匹配！</p>
+<ul>
+<li>运行训练，并保存结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">config &#x3D; tf.ConfigProto()</span><br><span class="line">config.gpu_options.per_process_gpu_memory_fraction &#x3D; 0.7  # maximun alloc gpu50% of MEM</span><br><span class="line">config.gpu_options.allow_growth &#x3D; True  # allocate dynamically</span><br><span class="line">with tf.Session(config&#x3D;config) as sess:</span><br><span class="line">    # for i in range(100):</span><br><span class="line">    #     if i % 10 &#x3D;&#x3D; 0:</span><br><span class="line">    #         train_accuracy &#x3D; accuracy.eval(session&#x3D;sess, feed_dict&#x3D;&#123;x_: x_train, y_: onehot_encoded&#125;)</span><br><span class="line">    #</span><br><span class="line">    #     print(&quot;train_accuracy %g&quot; % train_accuracy)</span><br><span class="line">    #     train_step.run(session&#x3D;sess, feed_dict&#x3D;&#123;x_: x_train, y_: y_train&#125;)</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">    # 迭代20次，每次都把全部数据分成42000&#x2F;128个批次，分批喂入tf</span><br><span class="line">    for epoch in range(20):</span><br><span class="line">        print(&#39;epoch&#39;, epoch + 1)</span><br><span class="line">        for batch in range(int(len(x_train) &#x2F; 128)):</span><br><span class="line">            batch_x &#x3D; x_train[batch * 128:(batch + 1) * 128]</span><br><span class="line">            batch_y &#x3D; onehot_encoded[batch * 128:(batch + 1) * 128]</span><br><span class="line">            sess.run(train_step, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;)</span><br><span class="line"></span><br><span class="line">        batch_x &#x3D; x_train[int(len(x_train) &#x2F; 128) * 128:]</span><br><span class="line">        batch_y &#x3D; onehot_encoded[int(len(x_train) &#x2F; 128) * 128:]</span><br><span class="line"></span><br><span class="line">        sess.run(train_step, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;)</span><br><span class="line">        print(&quot;accuracy: %f&quot; % sess.run(accuracy, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;))</span><br><span class="line"></span><br><span class="line">    tf.train.Saver().save(sess, &quot;&#x2F;home&#x2F;milo&#x2F;Github&#x2F;machinelearning&#x2F;digit_recognizer&#x2F;mnist_model.ckpt&quot;)</span><br><span class="line"></span><br><span class="line">    tf.train.Saver().restore(sess, &quot;&#x2F;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;mnist_model.ckpt&quot;)</span><br><span class="line">    x_test &#x3D; test_df.values.reshape([-1, 784]).astype(np.float32)</span><br><span class="line">    # 直接跑图的最后一步: softmax计算能力</span><br><span class="line">    result &#x3D; sess.run(prediction, feed_dict&#x3D;&#123;x_: x_test&#125;)</span><br><span class="line">    label_test &#x3D; np.argmax(result, axis&#x3D;1)</span><br><span class="line">    # pd.DataFrame(label_test).to_csv(&quot;&#x2F;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;test_result.csv&quot;)</span><br><span class="line"></span><br><span class="line">    # 保存结果</span><br><span class="line">    submission &#x3D; pd.DataFrame(&#123;</span><br><span class="line">        &quot;ImageId&quot;: np.arange(1, 28000 + 1),</span><br><span class="line">        &quot;Label&quot;: label_test</span><br><span class="line">    &#125;)</span><br><span class="line">    submission.to_csv(&quot;&#x2F;home&#x2F;milo&#x2F;Github&#x2F;machinelearning&#x2F;digit_recognizer&#x2F;test_result.csv&quot;, index&#x3D;False)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<strong>经验：</strong></p>
+<p>&emsp;&emsp;0. 某个人没安装CUDA，还瞎吉儿Debug得很欢快，以为程序写错了！</p>
+<p>&emsp;&emsp;1. 一次性将42000张图片喂到5层神经网络结构中会出现OOM的情况，所以措施一是设置GPU内存使用阈值0.7；措施二是使用小批量处理。</p>
+<p>&emsp;&emsp;2. 小批量处理需要注意一个细节：最后一批需要在循环外单独处理。</p>
+<p>&emsp;&emsp;3. 注意输出精确度的print写法，是使用sess.run()运行accuracy方程。</p>
+<p>&emsp;&emsp;4. 使用tf.train.Saver()可以保存模型，参数是tf.session()，需要指定模型文件的存储位置。</p>
+<p>&emsp;&emsp;5. 上传Kaggle时需要注意，Kaggle要求CSV文件中要带有标签，所以需要自定义。注意细节：”ImageId”: np.arange(1, 28000 + 1)，Id从1开始，直接写死就行了。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 代码需要重构。</p>
+<p>&emsp;&emsp;1. 流程需要梳理清楚。<strong>训练</strong>跑的是<font color = 'red'><strong>优化器取损失函数最小是</strong></font>的方程；打印<strong>精确度</strong>跑的是<font color = 'red'><strong>对比预测值</strong></font>的方程；<strong>测试</strong>是直接跑神经网络模型最后的<font color = 'red'><strong>softmax</strong></font>方程。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><ul>
+<li><p>硬件：</p>
+<ul>
+<li><p>I5-9400F</p>
+</li>
+<li><p>16G DDR4</p>
+</li>
+<li><p>七彩虹RTX 2060 6G Ultra OC</p>
+</li>
+</ul>
+</li>
+<li><p>软件：</p>
+<ul>
+<li><p>Anaconda(Python3.7.3) 1.7.2</p>
+</li>
+<li><p>Tensorflow 1.13.1</p>
+</li>
+<li><p>Pycharm 2019.1</p>
+</li>
+<li><p>cudatoolkit 10.0.130 (运用显卡的计算能力，很重要！！！)</p>
+</li>
+<li><p>cudnn 7.3.1</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><p>待补充</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>&emsp;&emsp;机器学习项目清单（摘录自《机器学习实战 基于Scikit-Learn和Tensorflow》）</p>
+<p>&emsp;&emsp;1. 架构问题，关注蓝图</p>
+<p>&emsp;&emsp;2. 获取数据</p>
+<p>&emsp;&emsp;3. 研究数据以获取灵感</p>
+<p>&emsp;&emsp;4. 准备数据以更好地将低层模型暴露给机器学习</p>
+<p>&emsp;&emsp;5. 研究各种不同的模型，并列出最好的模型</p>
+<p>&emsp;&emsp;6. 微调模型，并将其组合为最好的解决方案</p>
+<p>&emsp;&emsp;7. 提出解决方案</p>
+<p>&emsp;&emsp;8. 启动、监视、维护系统</p>
+<p>&emsp;&emsp;9. 以上清单可以随时调整</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AI/" rel="tag"># AI</a>
+          
+            <a href="/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+          
+            <a href="/tags/CNN/" rel="tag"># CNN</a>
+          
+            <a href="/tags/Kaggle/" rel="tag"># Kaggle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%A2%AF%E5%BA%A6%E6%96%B9%E5%90%91%E6%98%AF%E5%87%BD%E6%95%B0%E5%B1%80%E9%83%A8%E4%B8%8A%E5%8D%87%E6%9C%80%E5%BF%AB%E7%9A%84%E6%96%B9%E5%90%91/" rel="next" title="为什么梯度方向是函数局部上升最快的方向">
+                <i class="fa fa-chevron-left"></i> 为什么梯度方向是函数局部上升最快的方向
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/" rel="prev" title="导入FaceNet的一些坑">
+                导入FaceNet的一些坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Milo Choi</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/%20%7C%7C%20th">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/%20%7C%7C%20tags">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/choibunbing" title="GitHub &rarr; https://github.com/choibunbing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:choibunbing@gmail.com" title="E-Mail &rarr; mailto:choibunbing@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#背景简介"><span class="nav-number">1.</span> <span class="nav-text">背景简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验环境"><span class="nav-number">3.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Milo Choi</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+    
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

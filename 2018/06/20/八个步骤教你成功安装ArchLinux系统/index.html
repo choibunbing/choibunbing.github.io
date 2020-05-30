@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文实验环境    配件 配置     硬件 神舟笔记本K650D-i5 D3   硬盘 西数(WDC WD10JPLX-00MBPT0)   U盘制作软件 USBWriter   Arch系统ISO archlinux-2018.06.01-x86_64     注意：本文使用UEFI方式安装Arch Linux，所以首先请检查电脑是否支持UEFI启动。BIOS&#x2F;MBR启动方式请不要继续往下看。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="八个步骤教你成功安装ArchLinux系统">
+<meta property="og:url" content="https://choibunbing.com/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Milo研究中心">
+<meta property="og:description" content="本文实验环境    配件 配置     硬件 神舟笔记本K650D-i5 D3   硬盘 西数(WDC WD10JPLX-00MBPT0)   U盘制作软件 USBWriter   Arch系统ISO archlinux-2018.06.01-x86_64     注意：本文使用UEFI方式安装Arch Linux，所以首先请检查电脑是否支持UEFI启动。BIOS&#x2F;MBR启动方式请不要继续往下看。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-06-20T08:56:12.000Z">
+<meta property="article:modified_time" content="2020-05-30T07:07:25.022Z">
+<meta property="article:author" content="Milo Choi">
+<meta property="article:tag" content="Arch">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://choibunbing.com/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>八个步骤教你成功安装ArchLinux系统 | Milo研究中心</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Milo研究中心</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">往者不可諫，來者猶可追。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://choibunbing.com/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Milo Choi"/>
+      <meta itemprop="description" content=""/>
+      <meta itemprop="image" content="/images/avatar.gif"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Milo研究中心"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">八个步骤教你成功安装ArchLinux系统
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-06-20 16:56:12" itemprop="dateCreated datePublished" datetime="2018-06-20T16:56:12+08:00">2018-06-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-05-30 15:07:25" itemprop="dateModified" datetime="2020-05-30T15:07:25+08:00">2020-05-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Share/" itemprop="url" rel="index"><span itemprop="name">Share</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="本文实验环境"><a href="#本文实验环境" class="headerlink" title="本文实验环境"></a>本文实验环境</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">配件</th>
+<th style="text-align:center">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">硬件</td>
+<td style="text-align:center">神舟笔记本K650D-i5 D3</td>
+</tr>
+<tr>
+<td style="text-align:center">硬盘</td>
+<td style="text-align:center">西数(WDC WD10JPLX-00MBPT0)</td>
+</tr>
+<tr>
+<td style="text-align:center">U盘制作软件</td>
+<td style="text-align:center">USBWriter</td>
+</tr>
+<tr>
+<td style="text-align:center">Arch系统ISO</td>
+<td style="text-align:center">archlinux-2018.06.01-x86_64</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>注意：本文使用UEFI方式安装Arch Linux，所以首先请检查电脑是否支持UEFI启动。BIOS/MBR启动方式请不要继续往下看。</strong><br><a id="more"></a></p>
+<h4 id="具体的八个步骤"><a href="#具体的八个步骤" class="headerlink" title="具体的八个步骤"></a>具体的八个步骤</h4><ul>
+<li><p><strong>步骤一：下载Arch系统ISO，并制作U盘启动工</strong></p>
+</li>
+<li><p><strong>步骤二：U盘启动，进入live系统并联网</strong></p>
+<p>无线网络shell（本文使用无线网络）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wifi-menu</span><br></pre></td></tr></table></figure>
+<p>ADS网络shell（未测试，仅供参考）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pppoe-setup</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start adsl</span><br></pre></td></tr></table></figure>
+<p>连接之后，使用<font color=#FF0000><code>ping</code></font>命令查看网络是否联通。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping www.google.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>步骤三：同步系统时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timedatectl set-ntp true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>步骤四：编辑镜像站的文件</strong></p>
+<p>打开文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist</span><br></pre></td></tr></table></figure>
+<p>将<font color=#FF0000><code>中国</code></font>的镜像站放在<font color=#FF0000><code>最前面</code></font>！</p>
+</li>
+<li><p><strong>步骤五：磁盘分区</strong></p>
+<p>可以使用的工具：fdisk、ldisk、cfdisk。</p>
+<p>本文使用fdisk将磁盘分为两个区，包括/boot启动分区和/根分区，其中/boot分区500M，/根分区900G。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--查看磁盘--&gt;</span><br><span class="line">lsblk</span><br><span class="line"></span><br><span class="line">&lt;!--fdisk分区--&gt;</span><br><span class="line">fdisk &#x2F;dev&#x2F;sda</span><br><span class="line"></span><br><span class="line">&lt;!--新建GPT分区表--&gt;</span><br><span class="line">g</span><br><span class="line"></span><br><span class="line">&lt;!--新建分区--&gt;</span><br><span class="line">n</span><br><span class="line"></span><br><span class="line">&lt;!--分区序号，默认回车即可--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--第一个扇区的位置，默认回车即可--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--最后一个扇区的位置，&#x2F;boot分区+500M，&#x2F;根分区+900G--&gt;</span><br><span class="line">+500M</span><br><span class="line"></span><br><span class="line">&lt;!--全部分区完毕，保存并退出--&gt;</span><br><span class="line">w</span><br></pre></td></tr></table></figure>
+<p>分区完毕使用<font color=#FF0000><code>lsblk</code></font>查看磁盘分区情况。</p>
+</li>
+<li><p><strong>步骤六：格式化分区，并挂载</strong></p>
+<p>由于使用UEFI启动方式，需要ESP分区，因此/boot分区使用<font color=#FF0000><code>mkfs.fat -F32</code></font>进行格式化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--格式化&#x2F;boot分区（ESP分区）--&gt;</span><br><span class="line">mkfs.fat -F32 &#x2F;dev&#x2F;sda1</span><br><span class="line"></span><br><span class="line">&lt;!--格式化&#x2F;根分区--&gt;</span><br><span class="line">mkfs.ext4 &#x2F;dev&#x2F;sda2</span><br><span class="line"></span><br><span class="line">&lt;!--挂载&#x2F;根分区--&gt;</span><br><span class="line">mount &#x2F;dev&#x2F;sda2 &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--创建&#x2F;boot文件夹--&gt;</span><br><span class="line">mkdir &#x2F;mnt&#x2F;boot</span><br><span class="line"></span><br><span class="line">&lt;!--挂载&#x2F;boot分区--&gt;</span><br><span class="line">mount &#x2F;dev&#x2F;sda1 &#x2F;mnt&#x2F;boot</span><br></pre></td></tr></table></figure>
+<p>最后使用<font color=#FF0000><code>lsblk</code></font>查看磁盘分区情况。</p>
+</li>
+<li><p><strong>步骤七：安装Arch系统</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacstrap -i &#x2F;mnt base base-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>步骤八：配置系统</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--配置fstab，如果fstab文件已存在，可以删除该文件后重新追加内容--&gt;</span><br><span class="line">genfstab -U &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab</span><br><span class="line"></span><br><span class="line">&lt;!--配置新系统--&gt;</span><br><span class="line">&lt;!--进入新系统--&gt;</span><br><span class="line">arch-chroot &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--语言设置，反注释en_US.UTF-8 UTF-8和zh_CN.UTF-8 UTF-8--&gt;</span><br><span class="line">nano &#x2F;etc&#x2F;locale.gen</span><br><span class="line">locale-gen</span><br><span class="line">echo LANG&#x3D;en_US.UTF-8 &gt; &#x2F;etc&#x2F;locale.config</span><br><span class="line"></span><br><span class="line">&lt;!--设置时区，选择顺序4 9 1 1--&gt;</span><br><span class="line">tzselect</span><br><span class="line"></span><br><span class="line">&lt;!--设置硬件时间--&gt;</span><br><span class="line">hwclock --systohc --utc</span><br><span class="line"></span><br><span class="line">&lt;!--设置root密码--&gt;</span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line">&lt;!--新建用户，并设置用户密码，添加用户权限--&gt;</span><br><span class="line">useradd -m -g users -s &#x2F;bin&#x2F;bash 用户名</span><br><span class="line">passwd 用户名</span><br><span class="line">nano &#x2F;etc&#x2F;sudoers</span><br><span class="line"></span><br><span class="line">&lt;!--至关重要的一步：配置引导系统--&gt;</span><br><span class="line">&lt;!--安装引导工具--&gt;</span><br><span class="line">pacman -S dosfstools grub efibootmgr</span><br><span class="line">&lt;!--安装grub并写入设置文件，EFI路径为ESP分区--&gt;</span><br><span class="line">grub-install --target&#x3D;x86_64-efi --efi-directory&#x3D;&#x2F;boot --recheck</span><br><span class="line">grub-mkconfig -o &#x2F;boot&#x2F;grub&#x2F;grub.cfg</span><br></pre></td></tr></table></figure>
+<p>至此，Arch Linux系统基本安装完毕，可以直接重启系统，亦可配置完网络和桌面后再重启系统。网络和桌面的配置非本文重点，因此暂不赘述，还请查阅相关Wiki。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--卸载--&gt;</span><br><span class="line">umount -R &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--重启--&gt;</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Arch/" rel="tag"># Arch</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/30/%E5%A6%82%E4%BD%95%E5%A4%87%E4%BB%BDHexo%E5%8D%9A%E5%AE%A2/" rel="next" title="如何备份Hexo博客">
+                <i class="fa fa-chevron-left"></i> 如何备份Hexo博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/" rel="prev" title="机器学习常用算法">
+                机器学习常用算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Milo Choi</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/%20%7C%7C%20th">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/%20%7C%7C%20tags">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/choibunbing" title="GitHub &rarr; https://github.com/choibunbing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:choibunbing@gmail.com" title="E-Mail &rarr; mailto:choibunbing@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#本文实验环境"><span class="nav-number">1.</span> <span class="nav-text">本文实验环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体的八个步骤"><span class="nav-number">2.</span> <span class="nav-text">具体的八个步骤</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Milo Choi</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言&amp;emsp;&amp;emsp;初学机器学习的时候，Milo毫无方向感。看过Ng的机器学习，看过《机器学习实战》，看过《西瓜书》，虽然对机器学习有个大概的了解，但仍无法很熟练地说出每个算法的具体内容，以及算法所属类别。 &amp;emsp;&amp;emsp;无意间，在CSDN上找到了一份大纲，感觉豁然开朗。特此转载，日后将逐渐完善每个算法的相关学习和介绍。 &amp;emsp;&amp;emsp;以下是算法大纲：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习常用算法">
+<meta property="og:url" content="https://choibunbing.com/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Milo研究中心">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;初学机器学习的时候，Milo毫无方向感。看过Ng的机器学习，看过《机器学习实战》，看过《西瓜书》，虽然对机器学习有个大概的了解，但仍无法很熟练地说出每个算法的具体内容，以及算法所属类别。 &amp;emsp;&amp;emsp;无意间，在CSDN上找到了一份大纲，感觉豁然开朗。特此转载，日后将逐渐完善每个算法的相关学习和介绍。 &amp;emsp;&amp;emsp;以下是算法大纲：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-24T02:13:06.000Z">
+<meta property="article:modified_time" content="2020-05-30T07:07:25.023Z">
+<meta property="article:author" content="Milo Choi">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://choibunbing.com/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>机器学习常用算法 | Milo研究中心</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Milo研究中心</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">往者不可諫，來者猶可追。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://choibunbing.com/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Milo Choi"/>
+      <meta itemprop="description" content=""/>
+      <meta itemprop="image" content="/images/avatar.gif"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Milo研究中心"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习常用算法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-24 10:13:06" itemprop="dateCreated datePublished" datetime="2019-04-24T10:13:06+08:00">2019-04-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-05-30 15:07:25" itemprop="dateModified" datetime="2020-05-30T15:07:25+08:00">2020-05-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;初学机器学习的时候，Milo毫无方向感。看过Ng的机器学习，看过《机器学习实战》，看过《西瓜书》，虽然对机器学习有个大概的了解，但仍无法很熟练地说出每个算法的具体内容，以及算法所属类别。</p>
+<p>&emsp;&emsp;无意间，在CSDN上找到了一份大纲，感觉豁然开朗。特此转载，日后将逐渐完善每个算法的相关学习和介绍。</p>
+<p>&emsp;&emsp;以下是算法大纲：</p>
+<a id="more"></a>
+<blockquote>
+<p>资料来源：CSDN</p>
+</blockquote>
+<h4 id="监督学习-Supervised-learning"><a href="#监督学习-Supervised-learning" class="headerlink" title="监督学习(Supervised learning)"></a>监督学习(Supervised learning)</h4><ul>
+<li>人工神经网络 Artificial neural network<ul>
+<li>自动编码器 Autoencoder</li>
+<li>反向传播 Backpropagation</li>
+<li>玻尔兹曼机 Boltzmann machine</li>
+<li>卷积神经网络 Convolutional neural network</li>
+<li>Hopfield网络 Hopfield network</li>
+<li>多层感知器 Multilayer perceptron</li>
+<li>径向基函数网络（RBFN） Radial basis function network(RBFN)</li>
+<li>受限玻尔兹曼机 Restricted Boltzmann machine</li>
+<li>回归神经网络（RNN） Recurrent neural network(RNN)</li>
+<li>自组织映射（SOM） Self-organizing map(SOM)</li>
+<li>尖峰神经网络 Spiking neural network</li>
+</ul>
+</li>
+<li>贝叶斯 Bayesian<ul>
+<li>朴素贝叶斯 Naive Bayes</li>
+<li>高斯贝叶斯 Gaussian Naive Bayes</li>
+<li>多项朴素贝叶斯 Multinomial Naive Bayes</li>
+<li>平均一依赖性评估（AODE） Averaged One-Dependence Estimators(AODE)</li>
+<li>贝叶斯信念网络（BNN） Bayesian Belief Network(BBN)</li>
+<li>贝叶斯网络（BN） Bayesian Network(BN)</li>
+</ul>
+</li>
+<li>决策树 Decision Tree<ul>
+<li>分类和回归树（CART） Classification and regression tree (CART)</li>
+<li>迭代Dichotomiser 3（ID3） Iterative Dichotomiser 3(ID3)</li>
+<li>C4.5算法 C4.5 algorithm</li>
+<li>C5.0算法 C5.0 algorithm</li>
+<li>卡方自动交互检测（CHAID） Chi-squared Automatic Interaction Detection(CHAID)</li>
+<li>决策残端 Decision stump</li>
+<li>ID3算法 ID3 algorithm</li>
+<li>随机森林 Random forest</li>
+<li>SLIQ</li>
+</ul>
+</li>
+<li>线性分类 Linear classifier<ul>
+<li>Fisher的线性判别 Fisher’s linear discriminant</li>
+<li>线性回归 Linear regression</li>
+<li>Logistic回归 Logistic regression</li>
+<li>多项Logistic回归 Multinomial logistic regression</li>
+<li>朴素贝叶斯分类器 Naive Bayes classifier</li>
+<li>感知 Perceptron</li>
+<li>支持向量机 Support vector machine</li>
+</ul>
+</li>
+</ul>
+<h4 id="无监督学习-Unsupervised-learning"><a href="#无监督学习-Unsupervised-learning" class="headerlink" title="无监督学习(Unsupervised learning)"></a>无监督学习(Unsupervised learning)</h4><ul>
+<li>人工神经网络 Artificial neural network<ul>
+<li>对抗生成网络</li>
+<li>前馈神经网络 Feedforward neurral network</li>
+<li>极端学习机 Extreme learning machine</li>
+<li>逻辑学习机 Logic learning machine</li>
+<li>自组织映射 Self-organizing map</li>
+</ul>
+</li>
+<li>关联规则学习 Association rule learning<ul>
+<li>先验算法 Apriori algorithm</li>
+<li>Eclat算法 Eclat algorithm</li>
+<li>FP-growth算法 FP-growth algorithm</li>
+</ul>
+</li>
+<li>分层聚类 Hierarchical clustering<ul>
+<li>单连锁聚类 Single-linkage clustering</li>
+<li>概念聚类 Conceptual clustering</li>
+</ul>
+</li>
+<li>聚类分析 Cluster analysis<ul>
+<li>BIRCH</li>
+<li>DBSCAN</li>
+<li>期望最大化（EM） Expectation-maximization(EM)</li>
+<li>模糊聚类 Fuzzy clustering</li>
+<li>K-means算法 K-means algorithm</li>
+<li>k-均值聚类 K-means clustering</li>
+<li>k-位数 K-medians</li>
+<li>平均移 Mean-shift</li>
+<li>OPTICS算法 OPTICS algorithm</li>
+</ul>
+</li>
+<li>异常检测 Anomaly detection<ul>
+<li>k-最近邻算法（K-NN） k-nearest neighbors classification(K-NN)</li>
+<li>局部异常因子 Local outlier factor</li>
+</ul>
+</li>
+</ul>
+<h4 id="半监督学习-Semi-supervised-learning"><a href="#半监督学习-Semi-supervised-learning" class="headerlink" title="半监督学习(Semi-supervised learning)"></a>半监督学习(Semi-supervised learning)</h4><ul>
+<li>生成模型 Generative models</li>
+<li>低密度分离 Low-density separation</li>
+<li>基于图形的方法 Graph-based methods</li>
+<li>联合训练 Co-training</li>
+</ul>
+<h4 id="强化学习-Reinforcement-learning"><a href="#强化学习-Reinforcement-learning" class="headerlink" title="强化学习(Reinforcement learning)"></a>强化学习(Reinforcement learning)</h4><ul>
+<li>时间差分学习 Temporal difference learning</li>
+<li>Q学习 Q-learning</li>
+<li>学习自动 Learning Automata</li>
+<li>状态-行动-回馈-状态-行动（SARSA） State-Action-Reward-State-Action(SARSA)</li>
+</ul>
+<h4 id="深度学习-Deep-learning"><a href="#深度学习-Deep-learning" class="headerlink" title="深度学习(Deep learning)"></a>深度学习(Deep learning)</h4><ul>
+<li>深度信念网络 Deep belief machines</li>
+<li>深度卷积神经网络 Deep Convolutional neural networks</li>
+<li>深度递归神经网络 Deep Recurrent neural networks</li>
+<li>分层时间记忆 Hierarchical temporal memory</li>
+<li>深度玻尔兹曼机（DBM） Deep Boltzmann Machine(DBM)</li>
+<li>堆叠自动编码器 Stacked Boltzmann Machine</li>
+<li>生成式对抗网络 Generative adversarial networks</li>
+</ul>
+<h4 id="迁移学习-Transfer-learning"><a href="#迁移学习-Transfer-learning" class="headerlink" title="迁移学习(Transfer learning)"></a>迁移学习(Transfer learning)</h4><ul>
+<li>传递式迁移学习 Transitive Transfer Learning</li>
+</ul>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li>集成学习算法<ul>
+<li>Bootstrap aggregating (Bagging)</li>
+<li>AdaBoost</li>
+<li>梯度提升机（GBM） Gradient boosting machine(GBM)</li>
+<li>梯度提升决策树（GBRT） Gradient boosted decision tree(GBRT)</li>
+</ul>
+</li>
+<li>降维<ul>
+<li>主成分分析（PCA） Principal component analysis(PCA)</li>
+<li>主成分回归（PCR） Principal component regression(PCR)</li>
+<li>因子分析 Factor analysis</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/" rel="next" title="八个步骤教你成功安装ArchLinux系统">
+                <i class="fa fa-chevron-left"></i> 八个步骤教你成功安装ArchLinux系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="prev" title="设计模式">
+                设计模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Milo Choi</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/%20%7C%7C%20archive">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/%20%7C%7C%20th">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/%20%7C%7C%20tags">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/choibunbing" title="GitHub &rarr; https://github.com/choibunbing" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:choibunbing@gmail.com" title="E-Mail &rarr; mailto:choibunbing@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#监督学习-Supervised-learning"><span class="nav-number">2.</span> <span class="nav-text">监督学习(Supervised learning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无监督学习-Unsupervised-learning"><span class="nav-number">3.</span> <span class="nav-text">无监督学习(Unsupervised learning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#半监督学习-Semi-supervised-learning"><span class="nav-number">4.</span> <span class="nav-text">半监督学习(Semi-supervised learning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#强化学习-Reinforcement-learning"><span class="nav-number">5.</span> <span class="nav-text">强化学习(Reinforcement learning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#深度学习-Deep-learning"><span class="nav-number">6.</span> <span class="nav-text">深度学习(Deep learning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迁移学习-Transfer-learning"><span class="nav-number">7.</span> <span class="nav-text">迁移学习(Transfer learning)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">8.</span> <span class="nav-text">其他</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Milo Choi</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
