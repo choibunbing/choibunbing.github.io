@@ -701,8 +701,15 @@
 </li>
 <li><p>$nextTick()的作用？<br>&emsp;答：在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。因为Vue 实现响应式并不是数据发生变化之后 DOM 立即变化，而是按一定的策略进行 DOM 的更新。$nextTick 是在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM。</p>
 </li>
+<li><p>如何跨页面触发刷新？<br>&emsp;答：使用this.$root.eventHub.$emit、this.$root.eventHub.$on();、this.$root.eventHub.$off();。其中，this.$root.eventHub.$off()写在beforeDestroy(){}中。</p>
+</li>
+<li><p>vue中引用图片的方式？<br>&emsp;答：除了使用@/assets/路径以外，还可以先import图片，然后再引用。</p>
+</li>
+<li><p>正则表达式：/[,|.| ]|OR/<br>&emsp;答：[]中只匹配其中一个。｜右边匹配OR。整体解释是：匹配逗号，句号，空格，或者OR。</p>
+</li>
 <li><p>埋点的实现？<br>&emsp;答：略。</p>
 </li>
+<li></li>
 </ul>
 </li>
 <li><p>Back-End</p>
@@ -727,7 +734,39 @@
 </li>
 <li><p>Java8中，Date类型如何转换成Temporal类型？<br>&emsp;答：Date.toInstant。</p>
 </li>
-<li><p>国密算法？<br>&emsp;答：略。</p>
+<li><p>国密算法？<br>&emsp;答：略。有现成的jar包。bcprov-jdk15on的v1.64和hutool-all的5.2.5。</p>
+</li>
+<li><p>拷贝数组？<br>&emsp;答：使用System.arrayCopy(src, srcStart, target, targetStart, length);</p>
+</li>
+<li><p>IDEA重新编译/热部署？<br>&emsp;答：CTRL + F9或者JRebel插件。</p>
+</li>
+<li><p>如何进行自定义全局异常处理？<br>&emsp;答：首先创建@ControllerAdvice，其次创建@ExceptionHandler。</p>
+</li>
+<li><p>axis 2中关于RPC调用？<br>&emsp;答：略。</p>
+</li>
+<li><p>如何制作自定义starter？<br>&emsp;答：略。</p>
+</li>
+<li><p>@Cacheable和@CachePut的用法<br>&emsp;答：@CachePut可以确保方法被执行,同时方法的返回值也被记录到缓存中。@Cacheable当重复使用相同参数调用方法的时候，方法本身不会被调用执行，即方法本身被略过了，取而代之的是方法的结果直接从缓存中找到并返回了。@CachePut和@Cacheable这两个标签可以结合使用，当需要根据请求改变值的时候，利用@CachePut将值改变并写入到缓存中，而@Cacheable标签除了第一次之外，一直是取的缓存的值。注意：必须是同一个缓存实例。且，key值必须是相同的。</p>
+</li>
+<li><p>redisTemplate和stringRedisTemplate操作？<br>&emsp;答：redisTemplate是对象操作。stringRedisTemplate是字符串操作。</p>
+</li>
+<li><p>rabbitmq执行流程？<br>&emsp;答：rabbitmq——发送——交换器——交换器对应的queue。</p>
+</li>
+<li><p>actuator是什么？<br>&emsp;答：起到监控作用。另外，启动配置中，设置-verbose可以显示jvm启动详情。</p>
+</li>
+<li><p>Elasticsearch限制超过10000数据量的查询，如何解决？<br>&emsp;答：方法一：通过设置index 的设置参数max_result_window的值。方法二：使用scroll（游标）的方式进行查询。其中，方式二似乎无法进行翻页。</p>
+</li>
+<li><p>@Value(“${}”)和@Value(“#{}”)的区别？<br>&emsp;答：前者直接翻译成字符串。如果配置值为空，写法是@Value(“${配置项:默认配置}”)。后者是SpEL表达式，会解析内容。如果配置值为空，写法是@Value(“#{表达式?:默认值}”)。如果是在设置list的默认值，将list内容以逗号拼接即可。</p>
+</li>
+<li><p>如何导出mysql数据？<br>&emsp;答：mysqldump -u用戶名 -p密码 -d 数据库名 表名 &gt; 脚本名;</p>
+</li>
+<li><p>如何导入sql文件？<br>&emsp;答：进入mysql命令行，source A.sql;</p>
+</li>
+<li><p>SQL如何截取子字符串？<br>&emsp;答：substring(“AAA”, 0, 4);表示：从第0位开始，截取4位。</p>
+</li>
+<li><p>token的生成机制？<br>&emsp;答：略。</p>
+</li>
+<li><p>awk的用法？<br>&emsp;答：略。</p>
 </li>
 </ul>
 </li>
@@ -742,6 +781,14 @@
 <li>代码中一定要有log输出，因为上了远程环境，很多时候通过log可以直接定位bug点。</li>
 <li>删除操作尽量不要使用xxxTemplate.delete()，要使用逻辑删除。例如，把某个字段置为1。</li>
 <li>删除数据时，要考虑效率问题。例如，删除7天前的数据，如果7天前的数据有好几十亿，删除操作会影响到业务流程的执行效率。应该考虑异步多线程操作会不会影响到当前的业务需求。</li>
+<li>如果列表中多个组件调用同一个弹出框，不能在for遍历里写弹出框，会导致弹出框组件数据异常，它会总是列表项最后一项。应该在for循环范围外，独立创建一个template。</li>
+<li>前端可以使用+ new Date()，其含义为转换数值。</li>
+<li>后端查询涉及统计/聚集时，可以采用定时写表，随时查询的形式进行。</li>
+<li>定时器的调用可以提取到一个单独的微服务中，首先避免直接调用正式环境的借口。其次，发布时可以独立发布，同样不影响系统运行。</li>
+<li>vue中使用watch时，如果设置了immediate为true。它在绑定时会立即执行，监控对象的值为空时也会执行handler。监控时应该判断具体的属性。</li>
+<li>后端修改CRUD代码时，应该时刻谨记数据的回填，保证整个CRUD流程数据回填的完整性。</li>
+<li>为了防止后端乱码问题，配置项和配置值尽量使用英文数字下划线。涉及中文时，提交代码和发布到线上环境，应该将中文转化成accii码。</li>
+<li>系统启动时，一般会将部分数据写入缓存中。应该考虑是否可以提供刷新缓存的接口，和刷新定时器一样，应该单独一个微服务。避免某些数据更新后，需要重启正式环境。</li>
 </ol>
 ]]></content>
       <categories>
