@@ -677,4 +677,81 @@
         <tag>Design Patterns</tag>
       </tags>
   </entry>
+  <entry>
+    <title>2020上半年问题总结</title>
+    <url>/2020/06/07/2020%E4%B8%8A%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;工作的时候，因为是内网开发，所以遇到难题Milo都记在纸上。原本想一月一发，事实上却因为各种缘由拖了大半年，一下子整理起来问题还真有点多。以下内容可以说是问题集锦，或者大杂烩了。</p>
+<a id="more"></a>
+<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><ul>
+<li><p>Front-End</p>
+<ul>
+<li><p>强制刷新<br>&emsp;答：使用this.$forceUpdate();</p>
+</li>
+<li><p>立即刷新绑定的数据<br>&emsp;答：使用this.$set(对象, 属性, 值);</p>
+</li>
+<li><p>Echarts3中，legend如何底部显示？<br>&emsp;答：可以使用x和y属性定位。例如：x: ‘center’, y: ‘bottom’</p>
+</li>
+<li><p>Echarts3中，坐标文字如何对齐刻度线？<br>&emsp;答：在xAxis或者yAxis中设置axisTick的属性alignWithLabel为true。</p>
+</li>
+<li><p>Echarts3中，如何调整图与外层的边距？<br>&emsp;答：调整grid中的left，top，right，bottom属性即可，无需调整div的边距。</p>
+</li>
+<li><p>Echarts3中，如何设置值为0时，不显示tooltip？<br>&emsp;答：设置formatter，值为0时，调整回调函数中的params参数。</p>
+</li>
+<li><p>Echarts3的柱状图中，如果某个y值为0，如何设置不显示它的x柱？<br>&emsp;答：略。</p>
+</li>
+<li><p>$nextTick()的作用？<br>&emsp;答：在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。因为Vue 实现响应式并不是数据发生变化之后 DOM 立即变化，而是按一定的策略进行 DOM 的更新。$nextTick 是在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM。</p>
+</li>
+<li><p>埋点的实现？<br>&emsp;答：略。</p>
+</li>
+</ul>
+</li>
+<li><p>Back-End</p>
+<ul>
+<li><p>使用static变量，还是使用@Value，还是使用@PostConstruct？<br>&emsp;答：代码中尽量不要不出现魔法数值。取而代之使用取名的静态变量，或者配置。</p>
+</li>
+<li><p>Variable used in lambda expression should be final or effectively final异常。<br>&emsp;答：使用数组或者原子类型AtomicInteger。我通常是使用数组，因为有一次使用AtomicInteger时，出现了无法定位的数值不改变问题。</p>
+</li>
+<li><p>yml配置文件中，list或者set的写法？<br>&emsp;答：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">pets:</span></span><br><span class="line">	<span class="bullet">-</span> <span class="number">1</span></span><br><span class="line">	<span class="bullet">-</span> <span class="number">2</span></span><br><span class="line">	<span class="bullet">-</span> <span class="number">3</span></span><br><span class="line"><span class="string">//</span> <span class="string">或者</span></span><br><span class="line"><span class="attr">pets:</span> <span class="string">[1,2,3]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行docker的几种方式？</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start container</span><br><span class="line">docker <span class="built_in">exec</span> container</span><br><span class="line">docker run image</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何删除docker镜像？<br>&emsp;答：先使用rm删除容器，再使用rmi删除镜像。</p>
+</li>
+<li><p>使用poi-tl时，如何在同一个占位符上插入多张图片？<br>&emsp;答：首先，一定要是v1.7.0以上，如果要使用#this占位符，一定要v1.7.2以上。其次，修改模板文件，使用区块标签。</p>
+</li>
+<li><p>Json中，如何添加多个相同的key，但value值不同？<br>&emsp;答：多加一层JsonObject inner = new JsonObject();</p>
+</li>
+<li><p>Java8如何获取时间戳？<br>&emsp;答：LocalTime.now();</p>
+</li>
+<li><p>Java8中，Date类型如何转换成Temporal类型？<br>&emsp;答：Date.toInstant。</p>
+</li>
+<li><p>国密算法？<br>&emsp;答：略。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h4><ol>
+<li>修改template和修改借口一样，一定要检查所有使用该组件的地方。</li>
+<li>算法有分布式和非分布式之分，在分布式环境下，要考虑选择的算法是否可用。</li>
+<li>编程的时候一定要有：分布式和大数据的思想，一定要考虑大数据量的情况。例如，前端要考虑显示X亿Y千万，后端要考虑使用多线程处理。</li>
+<li>编程步骤一定是：先写算法思想的注释，再编码。</li>
+<li>实现需求的步骤一定是：先重构现有的代码，再考虑能否最简单的实现方式，考虑后再进行实现。因为一味地添加代码，增加字段，最终只会使系统越来越臃肿，而变得无法维护。</li>
+<li>重构一定是：一个功能一段代码，提高代码复用。变量有时候是必不可少的，可以用于定位异常。</li>
+<li>代码中一定要有log输出，因为上了远程环境，很多时候通过log可以直接定位bug点。</li>
+<li>删除操作尽量不要使用xxxTemplate.delete()，要使用逻辑删除。例如，把某个字段置为1。</li>
+<li>删除数据时，要考虑效率问题。例如，删除7天前的数据，如果7天前的数据有好几十亿，删除操作会影响到业务流程的执行效率。应该考虑异步多线程操作会不会影响到当前的业务需求。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Summary</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>FAQ</tag>
+        <tag>Vue</tag>
+        <tag>Springboot</tag>
+      </tags>
+  </entry>
 </search>
