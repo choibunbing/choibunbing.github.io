@@ -1,287 +1,804 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>2020上半年问题总结</title>
-      <link href="/2020/06/07/2020%E4%B8%8A%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"/>
-      <url>/2020/06/07/2020%E4%B8%8A%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</url>
-      
-        <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;工作的时候，因为是内网开发，所以遇到难题Milo都记在纸上。原本想一月一发，事实上却因为各种缘由拖了大半年，一下子整理起来问题还真有点多。以下内容可以说是问题集锦，或者大杂烩了。</p><a id="more"></a><h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><ul><li><p>Front-End</p><ul><li><p>强制刷新<br>&emsp;答：使用this.$forceUpdate();</p></li><li><p>立即刷新绑定的数据<br>&emsp;答：使用this.$set(对象, 属性, 值);</p></li><li><p>Echarts3中，legend如何底部显示？<br>&emsp;答：可以使用x和y属性定位。例如：x: ‘center’, y: ‘bottom’</p></li><li><p>Echarts3中，坐标文字如何对齐刻度线？<br>&emsp;答：在xAxis或者yAxis中设置axisTick的属性alignWithLabel为true。</p></li><li><p>Echarts3中，如何调整图与外层的边距？<br>&emsp;答：调整grid中的left，top，right，bottom属性即可，无需调整div的边距。</p></li><li><p>Echarts3中，如何设置值为0时，不显示tooltip？<br>&emsp;答：设置formatter，值为0时，调整回调函数中的params参数。</p></li><li><p>Echarts3的柱状图中，如果某个y值为0，如何设置不显示它的x柱？<br>&emsp;答：略。</p></li><li><p>$nextTick()的作用？<br>&emsp;答：在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。因为Vue 实现响应式并不是数据发生变化之后 DOM 立即变化，而是按一定的策略进行 DOM 的更新。$nextTick 是在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM。</p></li><li><p>如何跨页面触发刷新？<br>&emsp;答：使用this.$root.eventHub.$emit、this.$root.eventHub.$on();、this.$root.eventHub.$off();。其中，this.$root.eventHub.$off()写在beforeDestroy(){}中。</p></li><li><p>vue中引用图片的方式？<br>&emsp;答：除了使用@/assets/路径以外，还可以先import图片，然后再引用。</p></li><li><p>正则表达式：/[,|.| ]|OR/<br>&emsp;答：[]中只匹配其中一个。｜右边匹配OR。整体解释是：匹配逗号，句号，空格，或者OR。</p></li><li><p>埋点的实现？<br>&emsp;答：略。</p></li><li></li></ul></li><li><p>Back-End</p><ul><li><p>使用static变量，还是使用@Value，还是使用@PostConstruct？<br>&emsp;答：代码中尽量不要不出现魔法数值。取而代之使用取名的静态变量，或者配置。</p></li><li><p>Variable used in lambda expression should be final or effectively final异常。<br>&emsp;答：使用数组或者原子类型AtomicInteger。我通常是使用数组，因为有一次使用AtomicInteger时，出现了无法定位的数值不改变问题。</p></li><li><p>yml配置文件中，list或者set的写法？<br>&emsp;答：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">pets:</span></span><br><span class="line"><span class="bullet">-</span> <span class="number">1</span></span><br><span class="line"><span class="bullet">-</span> <span class="number">2</span></span><br><span class="line"><span class="bullet">-</span> <span class="number">3</span></span><br><span class="line"><span class="string">//</span> <span class="string">或者</span></span><br><span class="line"><span class="attr">pets:</span> <span class="string">[1,2,3]</span></span><br></pre></td></tr></table></figure></li><li><p>运行docker的几种方式？</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker start container</span><br><span class="line">docker <span class="built_in">exec</span> container</span><br><span class="line">docker run image</span><br></pre></td></tr></table></figure></li><li><p>如何删除docker镜像？<br>&emsp;答：先使用rm删除容器，再使用rmi删除镜像。</p></li><li><p>使用poi-tl时，如何在同一个占位符上插入多张图片？<br>&emsp;答：首先，一定要是v1.7.0以上，如果要使用#this占位符，一定要v1.7.2以上。其次，修改模板文件，使用区块标签。</p></li><li><p>Json中，如何添加多个相同的key，但value值不同？<br>&emsp;答：多加一层JsonObject inner = new JsonObject();</p></li><li><p>Java8如何获取时间戳？<br>&emsp;答：LocalTime.now();</p></li><li><p>Java8中，Date类型如何转换成Temporal类型？<br>&emsp;答：Date.toInstant。</p></li><li><p>国密算法？<br>&emsp;答：略。有现成的jar包。bcprov-jdk15on的v1.64和hutool-all的5.2.5。</p></li><li><p>拷贝数组？<br>&emsp;答：使用System.arrayCopy(src, srcStart, target, targetStart, length);</p></li><li><p>IDEA重新编译/热部署？<br>&emsp;答：CTRL + F9或者JRebel插件。</p></li><li><p>如何进行自定义全局异常处理？<br>&emsp;答：首先创建@ControllerAdvice，其次创建@ExceptionHandler。</p></li><li><p>axis 2中关于RPC调用？<br>&emsp;答：略。</p></li><li><p>如何制作自定义starter？<br>&emsp;答：略。</p></li><li><p>@Cacheable和@CachePut的用法<br>&emsp;答：@CachePut可以确保方法被执行,同时方法的返回值也被记录到缓存中。@Cacheable当重复使用相同参数调用方法的时候，方法本身不会被调用执行，即方法本身被略过了，取而代之的是方法的结果直接从缓存中找到并返回了。@CachePut和@Cacheable这两个标签可以结合使用，当需要根据请求改变值的时候，利用@CachePut将值改变并写入到缓存中，而@Cacheable标签除了第一次之外，一直是取的缓存的值。注意：必须是同一个缓存实例。且，key值必须是相同的。</p></li><li><p>redisTemplate和stringRedisTemplate操作？<br>&emsp;答：redisTemplate是对象操作。stringRedisTemplate是字符串操作。</p></li><li><p>rabbitmq执行流程？<br>&emsp;答：rabbitmq——发送——交换器——交换器对应的queue。</p></li><li><p>actuator是什么？<br>&emsp;答：起到监控作用。另外，启动配置中，设置-verbose可以显示jvm启动详情。</p></li><li><p>Elasticsearch限制超过10000数据量的查询，如何解决？<br>&emsp;答：方法一：通过设置index 的设置参数max_result_window的值。方法二：使用scroll（游标）的方式进行查询。其中，方式二似乎无法进行翻页。</p></li><li><p>@Value(“${}”)和@Value(“#{}”)的区别？<br>&emsp;答：前者直接翻译成字符串。如果配置值为空，写法是@Value(“${配置项:默认配置}”)。后者是SpEL表达式，会解析内容。如果配置值为空，写法是@Value(“#{表达式?:默认值}”)。如果是在设置list的默认值，将list内容以逗号拼接即可。</p></li><li><p>如何导出mysql数据？<br>&emsp;答：mysqldump -u用戶名 -p密码 -d 数据库名 表名 &gt; 脚本名;</p></li><li><p>如何导入sql文件？<br>&emsp;答：进入mysql命令行，source A.sql;</p></li><li><p>SQL如何截取子字符串？<br>&emsp;答：substring(“AAA”, 0, 4);表示：从第0位开始，截取4位。</p></li><li><p>token的生成机制？<br>&emsp;答：略。</p></li><li><p>awk的用法？<br>&emsp;答：略。</p></li></ul></li></ul><h4 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h4><ol><li>修改template和修改借口一样，一定要检查所有使用该组件的地方。</li><li>算法有分布式和非分布式之分，在分布式环境下，要考虑选择的算法是否可用。</li><li>编程的时候一定要有：分布式和大数据的思想，一定要考虑大数据量的情况。例如，前端要考虑显示X亿Y千万，后端要考虑使用多线程处理。</li><li>编程步骤一定是：先写算法思想的注释，再编码。</li><li>实现需求的步骤一定是：先重构现有的代码，再考虑能否最简单的实现方式，考虑后再进行实现。因为一味地添加代码，增加字段，最终只会使系统越来越臃肿，而变得无法维护。</li><li>重构一定是：一个功能一段代码，提高代码复用。变量有时候是必不可少的，可以用于定位异常。</li><li>代码中一定要有log输出，因为上了远程环境，很多时候通过log可以直接定位bug点。</li><li>删除操作尽量不要使用xxxTemplate.delete()，要使用逻辑删除。例如，把某个字段置为1。</li><li>删除数据时，要考虑效率问题。例如，删除7天前的数据，如果7天前的数据有好几十亿，删除操作会影响到业务流程的执行效率。应该考虑异步多线程操作会不会影响到当前的业务需求。</li><li>如果列表中多个组件调用同一个弹出框，不能在for遍历里写弹出框，会导致弹出框组件数据异常，它会总是列表项最后一项。应该在for循环范围外，独立创建一个template。</li><li>前端可以使用+ new Date()，其含义为转换数值。</li><li>后端查询涉及统计/聚集时，可以采用定时写表，随时查询的形式进行。</li><li>定时器的调用可以提取到一个单独的微服务中，首先避免直接调用正式环境的借口。其次，发布时可以独立发布，同样不影响系统运行。</li><li>vue中使用watch时，如果设置了immediate为true。它在绑定时会立即执行，监控对象的值为空时也会执行handler。监控时应该判断具体的属性。</li><li>后端修改CRUD代码时，应该时刻谨记数据的回填，保证整个CRUD流程数据回填的完整性。</li><li>为了防止后端乱码问题，配置项和配置值尽量使用英文数字下划线。涉及中文时，提交代码和发布到线上环境，应该将中文转化成accii码。</li><li>系统启动时，一般会将部分数据写入缓存中。应该考虑是否可以提供刷新缓存的接口，和刷新定时器一样，应该单独一个微服务。避免某些数据更新后，需要重启正式环境。</li></ol>]]></content>
-      
-      
+<search>
+  <entry>
+    <title>Java实现常用排序算法</title>
+    <url>/2019/11/23/Java%E5%AE%9E%E7%8E%B0%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>&emsp;&emsp;本文主要回顾了部分常用排序算法，包括冒泡排序，快速排序，选择排序，插入排序，希尔排序，以及归并排序。</p>
+<ul>
+<li>稳定性和算法复杂度</li>
+</ul>
+<p>稳定性：飞机插毛，即归并排序，基数排序，插入排序，冒泡排序是稳定的。<br>平均算法复杂度：快堆龟，即快速排序，堆排序，归并排序是nlogn。<br><a href="https://www.cnblogs.com/guoyaohua/p/8600214.html" target="_blank" rel="noopener">参考blog，含gif演示，注意：该文章中的算法有误。</a></p>
+<a id="more"></a>
+<ul>
+<li>冒泡排序</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(bubbleSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">5</span>, <span class="number">10</span>, <span class="number">25</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">15</span>, <span class="number">30</span>, <span class="number">28</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] bubbleSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; ++i) &#123; <span class="comment">// 用于记录每一轮排序之后，已经确定位置的元素个数</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; arr.length - i - <span class="number">1</span>; ++j) &#123; <span class="comment">// 注意arr.length - i - 1，因为j从0开始</span></span><br><span class="line">                <span class="keyword">if</span> (arr[j + <span class="number">1</span>] &lt; arr[j]) &#123; <span class="comment">// 从小到大</span></span><br><span class="line">                  arr[j + <span class="number">1</span>] = arr[j + <span class="number">1</span>] + arr[j];</span><br><span class="line">                  arr[j] = arr[j + <span class="number">1</span>] - arr[j];</span><br><span class="line">                  arr[j + <span class="number">1</span>] = arr[j + <span class="number">1</span>] - arr[j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>快速排序</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">15</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">20</span>, <span class="number">1</span>, <span class="number">18</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">22</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(quickSort(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] quickSort(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || start &lt; <span class="number">0</span> || end &gt;= arr.length || start &gt; end) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> partitionIndex = partition(arr, start, end);</span><br><span class="line">        <span class="keyword">if</span> (partitionIndex &gt; start) &#123;</span><br><span class="line">            quickSort(arr, start, partitionIndex - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (partitionIndex &lt; end) &#123;</span><br><span class="line">            quickSort(arr, partitionIndex + <span class="number">1</span>, end);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 算法参考geeksforgeeks</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> pivot = (<span class="keyword">int</span>) (start + Math.random() * (end - start + <span class="number">1</span>)); <span class="comment">// 随机选择一个数作为对比点</span></span><br><span class="line">        <span class="keyword">int</span> biggerIndex = start - <span class="number">1</span>; <span class="comment">// 挖坑，用比对比点小的数来填</span></span><br><span class="line">        swap(arr, pivot, end); <span class="comment">// 将对比点置于最后一位</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; end; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[i] &gt;= arr[end]) &#123;</span><br><span class="line">                biggerIndex++;</span><br><span class="line">                swap(arr, i, biggerIndex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        biggerIndex++;</span><br><span class="line">        swap(arr, biggerIndex, end); <span class="comment">// 最后需要将对比点归位</span></span><br><span class="line">        <span class="keyword">return</span> biggerIndex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == j) &#123; <span class="comment">// 如果不加此条件，会出现置换0的情况</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[j] = arr[j] + arr[i];</span><br><span class="line">        arr[i] = arr[j] - arr[i];</span><br><span class="line">        arr[j] = arr[j] - arr[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择排序</li>
+</ul>
+<p>最稳定，无论什么数据，时间复杂度都是n^2。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectionSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(selectionSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">8</span>, <span class="number">19</span>, <span class="number">22</span>, <span class="number">1</span>, <span class="number">38</span>, <span class="number">2</span>, <span class="number">56</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">34</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] selectionSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; ++i) &#123; <span class="comment">// 用于控制位置</span></span><br><span class="line">            <span class="keyword">int</span> minIndex = i;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; arr.length; ++j) &#123; <span class="comment">// 每次选最小的替换第一位</span></span><br><span class="line">                <span class="keyword">if</span> (arr[j] &lt; arr[minIndex]) &#123;</span><br><span class="line">                    minIndex = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> temp = arr[minIndex];</span><br><span class="line">            arr[minIndex] = arr[i];</span><br><span class="line">            arr[i] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>插入排序</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InsertionSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(insertionSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">2</span>, <span class="number">11</span>, <span class="number">28</span>, <span class="number">4</span>, <span class="number">81</span>, <span class="number">8</span>, <span class="number">20</span>, <span class="number">33</span>, <span class="number">15</span>, <span class="number">29</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] insertionSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> current;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length- <span class="number">1</span>; ++i) &#123;</span><br><span class="line">            current = arr[i + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> preIndex = i;</span><br><span class="line">            <span class="keyword">while</span> (preIndex &gt;= <span class="number">0</span> &amp;&amp; current &lt; arr[preIndex]) &#123; <span class="comment">// 前插，所有数据后移</span></span><br><span class="line">                arr[preIndex + <span class="number">1</span>] = arr[preIndex];</span><br><span class="line">                preIndex--;</span><br><span class="line">            &#125;</span><br><span class="line">            arr[preIndex + <span class="number">1</span>] = current; <span class="comment">// 插入</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>希尔排序</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShellSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(shellSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">33</span>, <span class="number">18</span>, <span class="number">2</span>, <span class="number">30</span>, <span class="number">21</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">65</span>, <span class="number">29</span>, <span class="number">38</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] shellSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> temp, gap = arr.length / <span class="number">2</span>; <span class="comment">// 以数组长度的一半作为距离</span></span><br><span class="line">        <span class="keyword">while</span> (gap &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = gap; i &lt; arr.length; ++i) &#123;</span><br><span class="line">                temp = arr[i];</span><br><span class="line">                <span class="keyword">int</span> preIndex = i - gap;</span><br><span class="line">                <span class="keyword">while</span> (preIndex &gt;= <span class="number">0</span> &amp;&amp; arr[preIndex] &gt; temp) &#123; <span class="comment">// 同一代内排序，前插</span></span><br><span class="line">                    arr[preIndex + gap] = arr[preIndex];</span><br><span class="line">                    preIndex -= gap;</span><br><span class="line">                &#125;</span><br><span class="line">                arr[preIndex + gap] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">            gap /= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>归并排序</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(mergeSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">18</span>, <span class="number">28</span>, <span class="number">8</span>, <span class="number">11</span>, <span class="number">20</span>, <span class="number">37</span>, <span class="number">52</span>, <span class="number">1</span>, <span class="number">89</span>, <span class="number">21</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] mergeSort(<span class="keyword">int</span>[] array) &#123;</span><br><span class="line">        <span class="keyword">if</span> (array.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> array;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> mid = array.length / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span>[] left = Arrays.copyOfRange(array, <span class="number">0</span>, mid);</span><br><span class="line">        <span class="keyword">int</span>[] right = Arrays.copyOfRange(array, mid, array.length);</span><br><span class="line">        <span class="keyword">return</span> merge(mergeSort(left), mergeSort(right));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] merge(<span class="keyword">int</span>[] left, <span class="keyword">int</span>[] right) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[left.length + right.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>, i = <span class="number">0</span>, j = <span class="number">0</span>; index &lt; result.length; ++index) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt;= left.length) &#123;</span><br><span class="line">                result[index] = right[j++];</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j &gt;= right.length) &#123;</span><br><span class="line">                result[index] = left[i++];</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (left[i] &gt; right[j]) &#123;</span><br><span class="line">                result[index] = right[j++];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result[index] = left[i++];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
       <categories>
-          
-          <category> Summary </category>
-          
+        <category>Java</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Java </tag>
-            
-            <tag> FAQ </tag>
-            
-            <tag> Vue </tag>
-            
-            <tag> Springboot </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Java实现常用排序算法</title>
-      <link href="/2019/11/23/Java%E5%AE%9E%E7%8E%B0%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/"/>
-      <url>/2019/11/23/Java%E5%AE%9E%E7%8E%B0%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
-      
-        <content type="html"><![CDATA[<p>&emsp;&emsp;本文主要回顾了部分常用排序算法，包括冒泡排序，快速排序，选择排序，插入排序，希尔排序，以及归并排序。</p><ul><li>稳定性和算法复杂度</li></ul><p>稳定性：飞机插毛，即归并排序，基数排序，插入排序，冒泡排序是稳定的。<br>平均算法复杂度：快堆龟，即快速排序，堆排序，归并排序是nlogn。<br><a href="https://www.cnblogs.com/guoyaohua/p/8600214.html" target="_blank" rel="noopener">参考blog，含gif演示，注意：该文章中的算法有误。</a></p><a id="more"></a><ul><li>冒泡排序</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(bubbleSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">5</span>, <span class="number">10</span>, <span class="number">25</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">15</span>, <span class="number">30</span>, <span class="number">28</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] bubbleSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; ++i) &#123; <span class="comment">// 用于记录每一轮排序之后，已经确定位置的元素个数</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; arr.length - i - <span class="number">1</span>; ++j) &#123; <span class="comment">// 注意arr.length - i - 1，因为j从0开始</span></span><br><span class="line">                <span class="keyword">if</span> (arr[j + <span class="number">1</span>] &lt; arr[j]) &#123; <span class="comment">// 从小到大</span></span><br><span class="line">                  arr[j + <span class="number">1</span>] = arr[j + <span class="number">1</span>] + arr[j];</span><br><span class="line">                  arr[j] = arr[j + <span class="number">1</span>] - arr[j];</span><br><span class="line">                  arr[j + <span class="number">1</span>] = arr[j + <span class="number">1</span>] - arr[j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>快速排序</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">15</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">20</span>, <span class="number">1</span>, <span class="number">18</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">22</span>&#125;;</span><br><span class="line">        System.out.println(Arrays.toString(quickSort(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] quickSort(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || start &lt; <span class="number">0</span> || end &gt;= arr.length || start &gt; end) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> partitionIndex = partition(arr, start, end);</span><br><span class="line">        <span class="keyword">if</span> (partitionIndex &gt; start) &#123;</span><br><span class="line">            quickSort(arr, start, partitionIndex - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (partitionIndex &lt; end) &#123;</span><br><span class="line">            quickSort(arr, partitionIndex + <span class="number">1</span>, end);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 算法参考geeksforgeeks</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> pivot = (<span class="keyword">int</span>) (start + Math.random() * (end - start + <span class="number">1</span>)); <span class="comment">// 随机选择一个数作为对比点</span></span><br><span class="line">        <span class="keyword">int</span> biggerIndex = start - <span class="number">1</span>; <span class="comment">// 挖坑，用比对比点小的数来填</span></span><br><span class="line">        swap(arr, pivot, end); <span class="comment">// 将对比点置于最后一位</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; end; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[i] &gt;= arr[end]) &#123;</span><br><span class="line">                biggerIndex++;</span><br><span class="line">                swap(arr, i, biggerIndex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        biggerIndex++;</span><br><span class="line">        swap(arr, biggerIndex, end); <span class="comment">// 最后需要将对比点归位</span></span><br><span class="line">        <span class="keyword">return</span> biggerIndex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (i == j) &#123; <span class="comment">// 如果不加此条件，会出现置换0的情况</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[j] = arr[j] + arr[i];</span><br><span class="line">        arr[i] = arr[j] - arr[i];</span><br><span class="line">        arr[j] = arr[j] - arr[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>选择排序</li></ul><p>最稳定，无论什么数据，时间复杂度都是n^2。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectionSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(selectionSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">8</span>, <span class="number">19</span>, <span class="number">22</span>, <span class="number">1</span>, <span class="number">38</span>, <span class="number">2</span>, <span class="number">56</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">34</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] selectionSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; ++i) &#123; <span class="comment">// 用于控制位置</span></span><br><span class="line">            <span class="keyword">int</span> minIndex = i;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; arr.length; ++j) &#123; <span class="comment">// 每次选最小的替换第一位</span></span><br><span class="line">                <span class="keyword">if</span> (arr[j] &lt; arr[minIndex]) &#123;</span><br><span class="line">                    minIndex = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> temp = arr[minIndex];</span><br><span class="line">            arr[minIndex] = arr[i];</span><br><span class="line">            arr[i] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><ul><li>插入排序</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InsertionSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(insertionSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">2</span>, <span class="number">11</span>, <span class="number">28</span>, <span class="number">4</span>, <span class="number">81</span>, <span class="number">8</span>, <span class="number">20</span>, <span class="number">33</span>, <span class="number">15</span>, <span class="number">29</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] insertionSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> current;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length- <span class="number">1</span>; ++i) &#123;</span><br><span class="line">            current = arr[i + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> preIndex = i;</span><br><span class="line">            <span class="keyword">while</span> (preIndex &gt;= <span class="number">0</span> &amp;&amp; current &lt; arr[preIndex]) &#123; <span class="comment">// 前插，所有数据后移</span></span><br><span class="line">                arr[preIndex + <span class="number">1</span>] = arr[preIndex];</span><br><span class="line">                preIndex--;</span><br><span class="line">            &#125;</span><br><span class="line">            arr[preIndex + <span class="number">1</span>] = current; <span class="comment">// 插入</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>希尔排序</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShellSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(shellSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">33</span>, <span class="number">18</span>, <span class="number">2</span>, <span class="number">30</span>, <span class="number">21</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">65</span>, <span class="number">29</span>, <span class="number">38</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] shellSort(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr.length &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> temp, gap = arr.length / <span class="number">2</span>; <span class="comment">// 以数组长度的一半作为距离</span></span><br><span class="line">        <span class="keyword">while</span> (gap &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = gap; i &lt; arr.length; ++i) &#123;</span><br><span class="line">                temp = arr[i];</span><br><span class="line">                <span class="keyword">int</span> preIndex = i - gap;</span><br><span class="line">                <span class="keyword">while</span> (preIndex &gt;= <span class="number">0</span> &amp;&amp; arr[preIndex] &gt; temp) &#123; <span class="comment">// 同一代内排序，前插</span></span><br><span class="line">                    arr[preIndex + gap] = arr[preIndex];</span><br><span class="line">                    preIndex -= gap;</span><br><span class="line">                &#125;</span><br><span class="line">                arr[preIndex + gap] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">            gap /= <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>归并排序</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Arrays.toString(mergeSort(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">18</span>, <span class="number">28</span>, <span class="number">8</span>, <span class="number">11</span>, <span class="number">20</span>, <span class="number">37</span>, <span class="number">52</span>, <span class="number">1</span>, <span class="number">89</span>, <span class="number">21</span>&#125;)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] mergeSort(<span class="keyword">int</span>[] array) &#123;</span><br><span class="line">        <span class="keyword">if</span> (array.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> array;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> mid = array.length / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span>[] left = Arrays.copyOfRange(array, <span class="number">0</span>, mid);</span><br><span class="line">        <span class="keyword">int</span>[] right = Arrays.copyOfRange(array, mid, array.length);</span><br><span class="line">        <span class="keyword">return</span> merge(mergeSort(left), mergeSort(right));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] merge(<span class="keyword">int</span>[] left, <span class="keyword">int</span>[] right) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[left.length + right.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>, i = <span class="number">0</span>, j = <span class="number">0</span>; index &lt; result.length; ++index) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt;= left.length) &#123;</span><br><span class="line">                result[index] = right[j++];</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j &gt;= right.length) &#123;</span><br><span class="line">                result[index] = left[i++];</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (left[i] &gt; right[j]) &#123;</span><br><span class="line">                result[index] = right[j++];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result[index] = left[i++];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
+      <tags>
+        <tag>Java</tag>
+        <tag>Sorting Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么梯度方向是函数局部上升最快的方向</title>
+    <url>/2019/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%A2%AF%E5%BA%A6%E6%96%B9%E5%90%91%E6%98%AF%E5%87%BD%E6%95%B0%E5%B1%80%E9%83%A8%E4%B8%8A%E5%8D%87%E6%9C%80%E5%BF%AB%E7%9A%84%E6%96%B9%E5%90%91/</url>
+    <content><![CDATA[<p>&emsp;&emsp;谈机器学习，免不了要讲损失函数；讲损失函数，避不开梯度下降；运用梯度下降，必先确定梯度方向。为什么梯度方向是函数局部上升最快的方向？</p>
+<a id="more"></a>
+<p>&emsp;&emsp;这里首先引入<a href="https://baike.baidu.com/item/泰勒公式" target="_blank" rel="noopener">泰勒公式</a>：若函数f(x)在包含\(x_0\)的某个闭区间[a,b]上具有n阶导数，且在开区间(a,b)上具有(n+1)阶导数，则对闭区间[a,b]上任意一点x，成立下式：<script type="math/tex">f(x) = f(x_0) + \frac{f'(x_0)}{1!}(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + ... + \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n + R_n(x)</script></p>
+<p>&emsp;&emsp;其中，\(f^{(n)}(x)\)表示f(x)的n阶导数，等号后的多项式称为函数f(x)在\(x_0\)处的泰勒展开式，剩余的\(R_n(x)\)是泰勒公式的余项，是\((x-x_0)^n\)的高阶无穷小。</p>
+<p>&emsp;&emsp;因此，根据泰勒公式有，<script type="math/tex">f(x + \Delta x) - f(x) ≈ \nabla f(x)^T\Delta x</script></p>
+<p>&emsp;&emsp;公式左边为“函数增量”，即“函数局部上升的量”，它在什么时候取最大值呢？</p>
+<p>&emsp;&emsp;这里引入<a href="https://baike.baidu.com/item/点积" target="_blank" rel="noopener">点积的几何定义</a>：设二维空间内有两个向量\(\vec{a}\)和\(\vec{b}\)，\(|\vec{a}|\)和\(|\vec{b}|\)表示向量\(\vec{a}\)和\(\vec{b}\)的大小，它们的夹角为\(\theta(0 ≤ \theta ≤ \pi)\)，则内积定义为以下实数：<script type="math/tex">\vec{a} \cdot \vec{b} = |\vec{a}||\vec{b}|\cos\theta</script></p>
+<p>&emsp;&emsp;综上所述，结合梯度下降，可知\(\nabla f(x)^T\)和\(\Delta x\)都是向量，当梯度向量\(\nabla f(x)^T\)和\(\Delta x\)的方向相同时(\(\theta = 0\))，点积最大为1，即函数局部上升的量最大。所以梯度方向是函数局部上升最快的方向。</p>
+<p>&emsp;&emsp;所以，在做梯度下降算法的时候，使用的是梯度方向的<font color='red'><code>反方向！</code></font></p>
+]]></content>
       <categories>
-          
-          <category> Java </category>
-          
+        <category>AI</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Java </tag>
-            
-            <tag> Sorting Algorithm </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>导入FaceNet的一些坑</title>
-      <link href="/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/"/>
-      <url>/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/</url>
-      
-        <content type="html"><![CDATA[<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>&emsp;&emsp;FacenNet是谷歌提出的一种新的人脸识别的方法，该方法在LFW数据集上的准确度已经达到了99.65%。</p><p>&emsp;&emsp;<a href="https://arxiv.org/pdf/1503.03832" target="_blank" rel="noopener">FaceNet论文</a></p><p>&emsp;&emsp;<a href="https://github.com/davidsandberg/facenet" target="_blank" rel="noopener">FaceNet实现</a></p><h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>&emsp;&emsp;上个周末，Milo在FaceNet的导入上踩了整整两天的坑，包括开发环境，源代码报错，运行异常等等。希望本文的粗糙填坑可以帮助到更多和Milo一样的人工智障爱好者和初学者。</p><a id="more"></a><ul><li>开发环境（显卡：GeForce RTX 2060 6G）</li></ul><div class="table-container"><table><thead><tr><th style="text-align:left"></th><th style="text-align:left">方案一</th><th style="text-align:left">方案二</th><th style="text-align:left">方案三</th></tr></thead><tbody><tr><td style="text-align:left">tensorflow-gpu</td><td style="text-align:left">1.13.1</td><td style="text-align:left">1.7.0</td><td style="text-align:left">1.7.0</td></tr><tr><td style="text-align:left">cudatoolkit</td><td style="text-align:left">10.0.130</td><td style="text-align:left">9.0</td><td style="text-align:left">8.0</td></tr><tr><td style="text-align:left">cudnn</td><td style="text-align:left">7.3.1</td><td style="text-align:left">7.1.2</td><td style="text-align:left">7.1.3</td></tr><tr><td style="text-align:left">python</td><td style="text-align:left">3.7.3</td><td style="text-align:left">3.6.8</td><td style="text-align:left">3.6.8</td></tr><tr><td style="text-align:left">结果</td><td style="text-align:left">compare.py：成功<br>validate_on_lfw.py：失败</td><td style="text-align:left">compare.py：失败<br>validate_on_lfw.py：成功</td><td style="text-align:left">无法调用GPU<br>CPU运行两个文件均成功</td></tr></tbody></table></div><ul><li>代码需要修改的地方：</li></ul><p>&emsp;&emsp;但凡需要用到GPU的地方都加上：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># session中</span></span><br><span class="line">gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)</span><br><span class="line">                  sess = tf.Session(</span><br><span class="line">                         config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=<span class="literal">False</span>))</span><br><span class="line"><span class="comment"># parse_arguments(argv)中</span></span><br><span class="line">parser.add_argument(<span class="string">'--gpu_memory_fraction'</span>, type=float,</span><br><span class="line">                        help=<span class="string">'Upper bound on the amount of GPU memory that will be used by the process.'</span>, default=<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure></p><p>&emsp;&emsp;facenet.py中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># create_input_pipeline(input_queue, image_size, nrof_preprocess_threads, batch_size_placeholder)中，所有代码都缩进到scope内。</span></span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'tempscope'</span>):</span><br></pre></td></tr></table></figure></p><p>&emsp;&emsp;detect_face.py中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 87行附近，添加allow_pickle=True。</span></span><br><span class="line">data_dict = np.load(data_path, allow_pickle=<span class="literal">True</span>, encoding=<span class="string">'latin1'</span>).item()  <span class="comment"># pylint: disable=no-member</span></span><br></pre></td></tr></table></figure></p><ul><li>坑一：</li></ul><blockquote><p>Attempting to use uninitialized value InceptionResnetV1/Repeat_1/block17_4/Branch_1/Conv2d_0b_1x7/weights</p></blockquote><p>&emsp;&emsp;解决方案：启动参数设置成具体的模型.pb文件。如果设置成文件夹，程序会使用ckpt和meta文件，于是就会出现各种Attempting to use uninitialized value的情况。</p><ul><li>坑二：</li></ul><blockquote><p>Loaded runtime CuDNN library: 7600 (compatibility version 7600) but source was compiled with 7102 (compatibility version 7100). If using a binary install, upgrade your CuDNN library to match. If building from sources, make sure the library loaded at runtime matches a compatible version specified during compile configuration.</p></blockquote><p>&emsp;&emsp;解决方案：将cudnn版本降至7.1.2。Milo在Anaconda环境中尝试了各种版本，其中7.1.3和7.0.5不会报这个错，但是7.1.3会自动安装CUDA8.0版本，7.0.5又会出现其他异常，所以在Milo的电脑上只能选择7.1.2版本。</p><ul><li>坑三：</li></ul><blockquote><p>Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA</p></blockquote><p>&emsp;&emsp;解决方案：下载官方Tensorflow源文件进行重新编译和安装。(在此，Milo未做处理，因为这是个Warning，当时只做了方案查询，还有大坑需要填。)</p><ul><li>坑四：</li></ul><blockquote><p>freeze_graph.py用途</p></blockquote><p>&emsp;&emsp;总结：在长时间无法解决&gt;&gt;坑二&lt;&lt;的情况下，总感觉应该寻找载入参数的办法。这和常规Python开发真的有很大不同，正常情况下在命令行自定义参数即可，可这是神经网络的参数，如何将模型中的参数载入呢？山穷水复疑无路，柳暗花明又一村！Milo搜索了freeze_graph.py的用途，发现训练好的模型正是通过此文件将参数整合到模型中，最终生成.pb文件。所以，&gt;&gt;坑二&lt;&lt;顺其自然地解决了！</p><ul><li>坑五：</li></ul><blockquote><p>could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR</p></blockquote><p>&emsp;&emsp;实际情况一：当tensorflow-gpu版本&gt;1.8时就会出现这个异常。</p><p>&emsp;&emsp;实际情况二：看到CUDNN_OOXX_OOXX时，在代码中设置session的gpu_options可以解决部分问题。</p><ul><li>坑六：</li></ul><blockquote><p>InternalError (see above for traceback): Blas SGEMM launch failed</p></blockquote><p>&emsp;&emsp;总结：要么显卡太新，要么CUDNN版本问题。</p>]]></content>
-      
-      
+      <tags>
+        <tag>AI</tag>
+        <tag>Gradient Descent</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>八个步骤教你成功安装ArchLinux系统</title>
+    <url>/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h4 id="本文实验环境"><a href="#本文实验环境" class="headerlink" title="本文实验环境"></a>本文实验环境</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">配件</th>
+<th style="text-align:center">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">硬件</td>
+<td style="text-align:center">神舟笔记本K650D-i5 D3</td>
+</tr>
+<tr>
+<td style="text-align:center">硬盘</td>
+<td style="text-align:center">西数(WDC WD10JPLX-00MBPT0)</td>
+</tr>
+<tr>
+<td style="text-align:center">U盘制作软件</td>
+<td style="text-align:center">USBWriter</td>
+</tr>
+<tr>
+<td style="text-align:center">Arch系统ISO</td>
+<td style="text-align:center">archlinux-2018.06.01-x86_64</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>注意：本文使用UEFI方式安装Arch Linux，所以首先请检查电脑是否支持UEFI启动。BIOS/MBR启动方式请不要继续往下看。</strong><br><a id="more"></a></p>
+<h4 id="具体的八个步骤"><a href="#具体的八个步骤" class="headerlink" title="具体的八个步骤"></a>具体的八个步骤</h4><ul>
+<li><p><strong>步骤一：下载Arch系统ISO，并制作U盘启动工</strong></p>
+</li>
+<li><p><strong>步骤二：U盘启动，进入live系统并联网</strong></p>
+<p>无线网络shell（本文使用无线网络）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wifi-menu</span><br></pre></td></tr></table></figure>
+<p>ADS网络shell（未测试，仅供参考）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pppoe-setup</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start adsl</span><br></pre></td></tr></table></figure>
+<p>连接之后，使用<font color=#FF0000><code>ping</code></font>命令查看网络是否联通。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ping www.google.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>步骤三：同步系统时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">timedatectl set-ntp true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>步骤四：编辑镜像站的文件</strong></p>
+<p>打开文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nano &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist</span><br></pre></td></tr></table></figure>
+<p>将<font color=#FF0000><code>中国</code></font>的镜像站放在<font color=#FF0000><code>最前面</code></font>！</p>
+</li>
+<li><p><strong>步骤五：磁盘分区</strong></p>
+<p>可以使用的工具：fdisk、ldisk、cfdisk。</p>
+<p>本文使用fdisk将磁盘分为两个区，包括/boot启动分区和/根分区，其中/boot分区500M，/根分区900G。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--查看磁盘--&gt;</span><br><span class="line">lsblk</span><br><span class="line"></span><br><span class="line">&lt;!--fdisk分区--&gt;</span><br><span class="line">fdisk &#x2F;dev&#x2F;sda</span><br><span class="line"></span><br><span class="line">&lt;!--新建GPT分区表--&gt;</span><br><span class="line">g</span><br><span class="line"></span><br><span class="line">&lt;!--新建分区--&gt;</span><br><span class="line">n</span><br><span class="line"></span><br><span class="line">&lt;!--分区序号，默认回车即可--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--第一个扇区的位置，默认回车即可--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--最后一个扇区的位置，&#x2F;boot分区+500M，&#x2F;根分区+900G--&gt;</span><br><span class="line">+500M</span><br><span class="line"></span><br><span class="line">&lt;!--全部分区完毕，保存并退出--&gt;</span><br><span class="line">w</span><br></pre></td></tr></table></figure>
+<p>分区完毕使用<font color=#FF0000><code>lsblk</code></font>查看磁盘分区情况。</p>
+</li>
+<li><p><strong>步骤六：格式化分区，并挂载</strong></p>
+<p>由于使用UEFI启动方式，需要ESP分区，因此/boot分区使用<font color=#FF0000><code>mkfs.fat -F32</code></font>进行格式化。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--格式化&#x2F;boot分区（ESP分区）--&gt;</span><br><span class="line">mkfs.fat -F32 &#x2F;dev&#x2F;sda1</span><br><span class="line"></span><br><span class="line">&lt;!--格式化&#x2F;根分区--&gt;</span><br><span class="line">mkfs.ext4 &#x2F;dev&#x2F;sda2</span><br><span class="line"></span><br><span class="line">&lt;!--挂载&#x2F;根分区--&gt;</span><br><span class="line">mount &#x2F;dev&#x2F;sda2 &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--创建&#x2F;boot文件夹--&gt;</span><br><span class="line">mkdir &#x2F;mnt&#x2F;boot</span><br><span class="line"></span><br><span class="line">&lt;!--挂载&#x2F;boot分区--&gt;</span><br><span class="line">mount &#x2F;dev&#x2F;sda1 &#x2F;mnt&#x2F;boot</span><br></pre></td></tr></table></figure>
+<p>最后使用<font color=#FF0000><code>lsblk</code></font>查看磁盘分区情况。</p>
+</li>
+<li><p><strong>步骤七：安装Arch系统</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pacstrap -i &#x2F;mnt base base-devel</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>步骤八：配置系统</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--配置fstab，如果fstab文件已存在，可以删除该文件后重新追加内容--&gt;</span><br><span class="line">genfstab -U &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab</span><br><span class="line"></span><br><span class="line">&lt;!--配置新系统--&gt;</span><br><span class="line">&lt;!--进入新系统--&gt;</span><br><span class="line">arch-chroot &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--语言设置，反注释en_US.UTF-8 UTF-8和zh_CN.UTF-8 UTF-8--&gt;</span><br><span class="line">nano &#x2F;etc&#x2F;locale.gen</span><br><span class="line">locale-gen</span><br><span class="line">echo LANG&#x3D;en_US.UTF-8 &gt; &#x2F;etc&#x2F;locale.config</span><br><span class="line"></span><br><span class="line">&lt;!--设置时区，选择顺序4 9 1 1--&gt;</span><br><span class="line">tzselect</span><br><span class="line"></span><br><span class="line">&lt;!--设置硬件时间--&gt;</span><br><span class="line">hwclock --systohc --utc</span><br><span class="line"></span><br><span class="line">&lt;!--设置root密码--&gt;</span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line">&lt;!--新建用户，并设置用户密码，添加用户权限--&gt;</span><br><span class="line">useradd -m -g users -s &#x2F;bin&#x2F;bash 用户名</span><br><span class="line">passwd 用户名</span><br><span class="line">nano &#x2F;etc&#x2F;sudoers</span><br><span class="line"></span><br><span class="line">&lt;!--至关重要的一步：配置引导系统--&gt;</span><br><span class="line">&lt;!--安装引导工具--&gt;</span><br><span class="line">pacman -S dosfstools grub efibootmgr</span><br><span class="line">&lt;!--安装grub并写入设置文件，EFI路径为ESP分区--&gt;</span><br><span class="line">grub-install --target&#x3D;x86_64-efi --efi-directory&#x3D;&#x2F;boot --recheck</span><br><span class="line">grub-mkconfig -o &#x2F;boot&#x2F;grub&#x2F;grub.cfg</span><br></pre></td></tr></table></figure>
+<p>至此，Arch Linux系统基本安装完毕，可以直接重启系统，亦可配置完网络和桌面后再重启系统。网络和桌面的配置非本文重点，因此暂不赘述，还请查阅相关Wiki。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!--卸载--&gt;</span><br><span class="line">umount -R &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--重启--&gt;</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
       <categories>
-          
-          <category> AI </category>
-          
+        <category>Share</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> AI </tag>
-            
-            <tag> FaceNet </tag>
-            
-            <tag> Tensorflow </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>用CNN实现Digit Reconizer总结</title>
-      <link href="/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/"/>
-      <url>/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/</url>
-      
-        <content type="html"><![CDATA[<h4 id="背景简介"><a href="#背景简介" class="headerlink" title="背景简介"></a>背景简介</h4><p>&emsp;&emsp;本文实现的是Kaggle竞赛平台上Getting Started级别的Digit Reconizer（即MNIST）。使用Tensorflow搭建了5层卷积神经网络（Convolutional Neural Network，简称CNN），最终取得测试成绩是0.98742。</p><a id="more"></a><h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><ul><li>导入相关的包</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;本文使用了numpy，pandas，scikit-learn，以及tensorflow包。其中numpy主要用于处理数据格式；pandas主要用于读写文件；使用scikit-learn包进行One-Hot格式处理；Tensorflow负责CNN的搭建及运行。</p><p>&emsp;&emsp;<strong>缺陷：</strong> 未进行数据可视化和数据清理工作。</p><ul><li>读取数据，并查看内容</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 读取训练集</span><br><span class="line">train &#x3D; pd.read_csv(&quot;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;train.csv&quot;)</span><br><span class="line"># 读取测试集</span><br><span class="line">test &#x3D; pd.read_csv(&quot;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;test.csv&quot;)</span><br><span class="line"></span><br><span class="line"># shape:(42000,785)</span><br><span class="line">train_df &#x3D; train.copy()</span><br><span class="line">test_df &#x3D; test.copy()</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;首先使用pandas的read_csv()方法读取训练集和测试集，然后通过describe()和info()方法查看训练集的格式为(42000,785)，其中第一列为训练集标签（即Label）,剩余784列是手写图像的数据（因为图片大小是28*28）。</p><p>&emsp;&emsp;使用了copy()方法的初衷是防止未来操作修改了原始数据。后来经查阅相关资料发现Python中存在引用（=）、浅拷贝（copy()）、深拷贝的差别（deepcopy()）。正确的应该是使用deepcopy()对原始数据进行深拷贝，这样Python会重新创建一个对象，对新对象的任何修改都不会影响到原始对象。</p><p>&emsp;&emsp;<strong>缺陷：</strong> copy()方法使用错误，应该使用deepcopy()方法。</p><ul><li>格式化数据</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 根据需求格式化训练集</span><br><span class="line"># x_train.shape -&gt;  (42000, 784)</span><br><span class="line">x_train &#x3D; train_df.drop([&#39;label&#39;], axis&#x3D;1).values.reshape([-1, 784]).astype(np.float32)</span><br><span class="line"># y_train.shape -&gt;  (42000, 1)</span><br><span class="line"># y_train[0]    -&gt;  [1.]</span><br><span class="line">y_train &#x3D; train_df[&#39;label&#39;].values.reshape([-1, 1]).astype(np.float32)</span><br><span class="line"></span><br><span class="line"># one-hot using scikit-learn</span><br><span class="line"># onehot_encoded.shape -&gt; (42000, 10)</span><br><span class="line"># onehot_encoded[0] -&gt;  [0. 1. 0. 0. 0. 0. 0. 0. 0. 0.]</span><br><span class="line">onehot_encoded &#x3D; OneHotEncoder(sparse&#x3D;False).fit_transform(y_train)</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;格式化数据时应该注意以下几点：</p><p>&emsp;&emsp;0. 格式化要和占位符的格式匹配，否则喂数据的时候会出错。</p><p>&emsp;&emsp;1. 数据类型需要是float32或者float64，实验中报错提示的信息，具体为什么暂时没研究。</p><p>&emsp;&emsp;2. 训练集标签（Label），即此处的y_train，需要做One-Hot处理。此处采用scikit-learn包装的方法。</p><p>&emsp;&emsp;<strong>缺陷：</strong></p><p>&emsp;&emsp;0. 刚入门，对数据格式没有足够的重视，实验中发现它是最重要的环节之一！</p><p>&emsp;&emsp;1. 实际上代码的正确顺序应该是先写占位符，再根据占位符的shape进行训练集数据的格式化工作。</p><p>&emsp;&emsp;2. One-Hot算法有多种实现方式，其一是自定义实现；其二是scikit-learn包；其三Tensorflow包也提供算法支持。未来要有能力对One-Hot算法信手拈来。</p><p>&emsp;&emsp;3. 对数据格式认识不足，其实还有更简便的格式化方式，例如，x_train=train_df.iloc[:, 1:].values一步到位。</p><ul><li>定义占位符，喂数据时使用</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 占位符</span><br><span class="line">x_ &#x3D; tf.placeholder(dtype&#x3D;tf.float32, shape&#x3D;[None, 784])</span><br><span class="line">y_ &#x3D; tf.placeholder(dtype&#x3D;tf.float32, shape&#x3D;[None, 10])</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;要注意的是，占位符的shape要和喂神经网络的数据格式匹配。</p><p>&emsp;&emsp;<strong>经验：</strong> （若你和Milo一样曾经研究方向是分布式）可以把神经网络当成一个分布式系统，作业被分成许多个基本任务shuffle到各个节点上。其实，基本任务就是确定\(f(x) = wx + b\)的参数，此处参数不是向量，而节点就是一个个神经元。输入和输出有多少个节点，就有多少个任务，也就确定了向量的维度。</p><ul><li>定义神经网络的基本单元</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;&quot;</span><br><span class="line">定义变量</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def weight(shape):</span><br><span class="line">    return tf.Variable(tf.truncated_normal(shape, stddev&#x3D;0.1))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def bias(shape):</span><br><span class="line">    return tf.Variable(tf.constant(0.1, shape&#x3D;shape))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">定义层</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def conf2d(x, w):</span><br><span class="line">    return tf.nn.conv2d(x, w, strides&#x3D;[1, 1, 1, 1], padding&#x3D;&#39;SAME&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def max_pool(x):</span><br><span class="line">    return tf.nn.max_pool(x, ksize&#x3D;[1, 2, 2, 1], strides&#x3D;[1, 2, 2, 1], padding&#x3D;&#39;SAME&#39;)</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;此处Milo定义了权重、偏置、卷积层以及Max Pooling层，其中偏置项取常量0.1；卷基层的步伐是1，填充方式为SAME；Max Pooling层核大小是2*2，步伐为2，填充方式同样是SAME。</p><p>&emsp;&emsp;这里有必要解释一下卷积层输出大小的计算：</p><p>&emsp;&emsp;1. 教科书上，以及视频教程手推卷积层大小公式为：\(f(x) = \frac{Input - Filter + 2 * Padding}{Stride} + 1\)</p><p>&emsp;&emsp;2. Tensorflow中,SAME填充方式的卷积层输出大小计算公式为：\(f(x) = \lceil \frac{W}{Stride} \rceil\)，跟Filter和Padding没半毛钱关系.</p><p>&emsp;&emsp;3. Tensorflow中,VALID填充方式的卷积层输出大小计算公式为：\(f(x) = \lceil \frac{W - Filter + 1}{Stride} \rceil\)</p><p>&emsp;&emsp;<strong>缺陷：</strong></p><p>&emsp;&emsp;0. 起初写代码的时候完全没考虑重构。在没定义神经网络的基本单元的时候，整段代码乱成一锅粥，十分不利于代码调试，同时也阻碍对神经网络模型的理解。所以，<font color='red'><code>强烈建议进行重构工作！</code></font></p><p>&emsp;&emsp;1. 计算输出输出格式不熟练。根据卷积层和Max Pooling层的参数，需要提前规划神经网络模型中每一层的大小，正确计算每一层的输出，否则将会出现意想不到的惊（yi）喜（chang）。</p><ul><li>定义神经网络模型</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># SAME:输出大小等于输入大小除以步长向上取整，s是步长大小；</span><br><span class="line"># VALID:输出大小等于输入大小减去滤波器大小加上1，最后再除以步长（f为滤波器的大小，s是步长大小）。</span><br><span class="line"># 第一层 28*28*1 -&gt; 14*14*32</span><br><span class="line">x_images &#x3D; tf.reshape(x_, [-1, 28, 28, 1])</span><br><span class="line">w_conv1 &#x3D; weight([5, 5, 1, 32])</span><br><span class="line">b_conv1 &#x3D; bias([32])</span><br><span class="line">h_1 &#x3D; tf.nn.sigmoid(conf2d(x_images, w_conv1) + b_conv1)</span><br><span class="line">p_1 &#x3D; max_pool(h_1)</span><br><span class="line"># 第二层 14*14*32 -&gt; 7*7*64</span><br><span class="line">w_conv2 &#x3D; weight([5, 5, 32, 64])</span><br><span class="line">b_conv2 &#x3D; bias([64])</span><br><span class="line">h_2 &#x3D; tf.nn.sigmoid(conf2d(p_1, w_conv2) + b_conv2)</span><br><span class="line">p_2 &#x3D; max_pool(h_2)</span><br><span class="line"># 第三层 7*7*64 -&gt; 4*4*128</span><br><span class="line">w_conv3 &#x3D; weight([5, 5, 64, 128])</span><br><span class="line">b_conv3 &#x3D; bias([128])</span><br><span class="line">h_3 &#x3D; tf.nn.sigmoid(conf2d(p_2, w_conv3) + b_conv3)</span><br><span class="line">p_3 &#x3D; max_pool(h_3)</span><br><span class="line"># 第四层 4*4*128 -&gt; 1*1024</span><br><span class="line">w_fc1 &#x3D; weight([4 * 4 * 128, 1024])</span><br><span class="line">b_fc1 &#x3D; bias([1024])</span><br><span class="line">h_fc1 &#x3D; tf.nn.sigmoid(tf.matmul(tf.reshape(p_3, [-1, 4 * 4 * 128]), w_fc1) + b_fc1)</span><br><span class="line"># 第五层 1*1024 -&gt; 1*10</span><br><span class="line">w_fc2 &#x3D; weight([1024, 10])</span><br><span class="line">b_fc2 &#x3D; bias([10])</span><br><span class="line">y_conv &#x3D; tf.matmul(h_fc1, w_fc2) + b_fc2</span><br><span class="line"># tf.nn.softmax_cross_entropy_with_logits做了softmax和交叉熵</span><br><span class="line">prediction &#x3D; tf.nn.softmax(tf.matmul(h_fc1, w_fc2) + b_fc2)</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;<strong>经验：</strong></p><p>&emsp;&emsp;0. 卷积核的深度需要是2的N次幂。（他人经验借鉴）</p><p>&emsp;&emsp;1. tf.reshape()的维度参数中，-1表示不定义张量的维度。第一层中张量的维度将被reshape为42000维。</p><p>&emsp;&emsp;2. 每一层中做的操作包括：图片信息和权重w做卷积操作 —&gt; 卷积结果加上偏置项做激活操作 —&gt; 经过激活函数的结果进行Pooling操作。</p><p>&emsp;&emsp;3. 预测时，只关心softmax结果，所以图片数据直接喂prediction即可。</p><p>&emsp;&emsp;<strong>缺陷：</strong></p><p>&emsp;&emsp;0. 没有重构成独立的模块。最初抽象成独立模块的时候，Milo对输入数据的格式定义不熟悉，出现了各种异常，所以决定拆开，优先确保程序成功运行。</p><p>&emsp;&emsp;1. 对最后全连接的定义不清晰。究竟什么时候开始全连接？</p><ul><li>定义结果需要使用的数据</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># cross_entropy &#x3D; -tf.reduce_sum(y_ * tf.log(y_conv))</span><br><span class="line">loss &#x3D; tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels&#x3D;y_, logits&#x3D;y_conv))</span><br><span class="line">train_step &#x3D; tf.train.GradientDescentOptimizer(learning_rate&#x3D;0.1).minimize(loss)</span><br><span class="line">correct_prediction &#x3D; tf.equal(tf.argmax(y_conv, axis&#x3D;1), tf.argmax(y_, axis&#x3D;1))</span><br><span class="line">accuracy &#x3D; tf.reduce_mean(tf.cast(correct_prediction, dtype&#x3D;tf.float32))</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;0. 训练过程是要是损失函数取最小值，此处是对<font color = 'red'><strong>softmax</strong></font>结果做<font color = 'red'><strong>交叉熵</strong></font>，然后进行<font color = 'red'><strong>均值降维</strong></font>。</p><p>&emsp;&emsp;1. 精度计算是对比<font color = 'red'><strong>训练集标签</strong></font>和<font color = 'red'><strong>实际标签</strong></font>。</p><ul><li>题外话</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># batch</span><br><span class="line"># no batch cause: CUDNN_STATUS_INTERNAL_ERROR</span><br><span class="line"># The value of a feed cannot be a tf.Tensor object.</span><br><span class="line"># (&quot;shuffle_batch:0&quot;, shape&#x3D;(100, 42000, 784), dtype&#x3D;float32)</span><br><span class="line"># (&quot;Placeholder:0&quot;, shape&#x3D;(?, 784), dtype&#x3D;float32).</span><br><span class="line"># images, labels &#x3D; tf.train.shuffle_batch([x_train, onehot_encoded],</span><br><span class="line">#                                         batch_size&#x3D;100,</span><br><span class="line">#                                         num_threads&#x3D;6,</span><br><span class="line">#                                         capacity&#x3D;int(50000 * 0.4 + 3 * 100),</span><br><span class="line">#                                         min_after_dequeue&#x3D;1000</span><br><span class="line">#                                         )</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;<strong>经验：</strong></p><p>&emsp;&emsp;0. 在训练神经网络模型的时候出现OOM的情况，想使用tf.train.shuffle_batch分批处理，结果出现异常：”The value of a feed cannot be a tf.Tensor object.”。</p><p>&emsp;&emsp;1. 神经网络模型的输入和输出一定刚要和喂的数据维度相匹配！</p><ul><li>运行训练，并保存结果</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">config &#x3D; tf.ConfigProto()</span><br><span class="line">config.gpu_options.per_process_gpu_memory_fraction &#x3D; 0.7  # maximun alloc gpu50% of MEM</span><br><span class="line">config.gpu_options.allow_growth &#x3D; True  # allocate dynamically</span><br><span class="line">with tf.Session(config&#x3D;config) as sess:</span><br><span class="line">    # for i in range(100):</span><br><span class="line">    #     if i % 10 &#x3D;&#x3D; 0:</span><br><span class="line">    #         train_accuracy &#x3D; accuracy.eval(session&#x3D;sess, feed_dict&#x3D;&#123;x_: x_train, y_: onehot_encoded&#125;)</span><br><span class="line">    #</span><br><span class="line">    #     print(&quot;train_accuracy %g&quot; % train_accuracy)</span><br><span class="line">    #     train_step.run(session&#x3D;sess, feed_dict&#x3D;&#123;x_: x_train, y_: y_train&#125;)</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">    # 迭代20次，每次都把全部数据分成42000&#x2F;128个批次，分批喂入tf</span><br><span class="line">    for epoch in range(20):</span><br><span class="line">        print(&#39;epoch&#39;, epoch + 1)</span><br><span class="line">        for batch in range(int(len(x_train) &#x2F; 128)):</span><br><span class="line">            batch_x &#x3D; x_train[batch * 128:(batch + 1) * 128]</span><br><span class="line">            batch_y &#x3D; onehot_encoded[batch * 128:(batch + 1) * 128]</span><br><span class="line">            sess.run(train_step, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;)</span><br><span class="line"></span><br><span class="line">        batch_x &#x3D; x_train[int(len(x_train) &#x2F; 128) * 128:]</span><br><span class="line">        batch_y &#x3D; onehot_encoded[int(len(x_train) &#x2F; 128) * 128:]</span><br><span class="line"></span><br><span class="line">        sess.run(train_step, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;)</span><br><span class="line">        print(&quot;accuracy: %f&quot; % sess.run(accuracy, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;))</span><br><span class="line"></span><br><span class="line">    tf.train.Saver().save(sess, &quot;&#x2F;home&#x2F;milo&#x2F;Github&#x2F;machinelearning&#x2F;digit_recognizer&#x2F;mnist_model.ckpt&quot;)</span><br><span class="line"></span><br><span class="line">    tf.train.Saver().restore(sess, &quot;&#x2F;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;mnist_model.ckpt&quot;)</span><br><span class="line">    x_test &#x3D; test_df.values.reshape([-1, 784]).astype(np.float32)</span><br><span class="line">    # 直接跑图的最后一步: softmax计算能力</span><br><span class="line">    result &#x3D; sess.run(prediction, feed_dict&#x3D;&#123;x_: x_test&#125;)</span><br><span class="line">    label_test &#x3D; np.argmax(result, axis&#x3D;1)</span><br><span class="line">    # pd.DataFrame(label_test).to_csv(&quot;&#x2F;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;test_result.csv&quot;)</span><br><span class="line"></span><br><span class="line">    # 保存结果</span><br><span class="line">    submission &#x3D; pd.DataFrame(&#123;</span><br><span class="line">        &quot;ImageId&quot;: np.arange(1, 28000 + 1),</span><br><span class="line">        &quot;Label&quot;: label_test</span><br><span class="line">    &#125;)</span><br><span class="line">    submission.to_csv(&quot;&#x2F;home&#x2F;milo&#x2F;Github&#x2F;machinelearning&#x2F;digit_recognizer&#x2F;test_result.csv&quot;, index&#x3D;False)</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;<strong>经验：</strong></p><p>&emsp;&emsp;0. 某个人没安装CUDA，还瞎吉儿Debug得很欢快，以为程序写错了！</p><p>&emsp;&emsp;1. 一次性将42000张图片喂到5层神经网络结构中会出现OOM的情况，所以措施一是设置GPU内存使用阈值0.7；措施二是使用小批量处理。</p><p>&emsp;&emsp;2. 小批量处理需要注意一个细节：最后一批需要在循环外单独处理。</p><p>&emsp;&emsp;3. 注意输出精确度的print写法，是使用sess.run()运行accuracy方程。</p><p>&emsp;&emsp;4. 使用tf.train.Saver()可以保存模型，参数是tf.session()，需要指定模型文件的存储位置。</p><p>&emsp;&emsp;5. 上传Kaggle时需要注意，Kaggle要求CSV文件中要带有标签，所以需要自定义。注意细节：”ImageId”: np.arange(1, 28000 + 1)，Id从1开始，直接写死就行了。</p><p>&emsp;&emsp;<strong>缺陷：</strong></p><p>&emsp;&emsp;0. 代码需要重构。</p><p>&emsp;&emsp;1. 流程需要梳理清楚。<strong>训练</strong>跑的是<font color = 'red'><strong>优化器取损失函数最小是</strong></font>的方程；打印<strong>精确度</strong>跑的是<font color = 'red'><strong>对比预测值</strong></font>的方程；<strong>测试</strong>是直接跑神经网络模型最后的<font color = 'red'><strong>softmax</strong></font>方程。</p><h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><ul><li><p>硬件：</p><ul><li><p>I5-9400F</p></li><li><p>16G DDR4</p></li><li><p>七彩虹RTX 2060 6G Ultra OC</p></li></ul></li><li><p>软件：</p><ul><li><p>Anaconda(Python3.7.3) 1.7.2</p></li><li><p>Tensorflow 1.13.1</p></li><li><p>Pycharm 2019.1</p></li><li><p>cudatoolkit 10.0.130 (运用显卡的计算能力，很重要！！！)</p></li><li><p>cudnn 7.3.1</p></li></ul></li></ul><h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><p>待补充</p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>&emsp;&emsp;机器学习项目清单（摘录自《机器学习实战 基于Scikit-Learn和Tensorflow》）</p><p>&emsp;&emsp;1. 架构问题，关注蓝图</p><p>&emsp;&emsp;2. 获取数据</p><p>&emsp;&emsp;3. 研究数据以获取灵感</p><p>&emsp;&emsp;4. 准备数据以更好地将低层模型暴露给机器学习</p><p>&emsp;&emsp;5. 研究各种不同的模型，并列出最好的模型</p><p>&emsp;&emsp;6. 微调模型，并将其组合为最好的解决方案</p><p>&emsp;&emsp;7. 提出解决方案</p><p>&emsp;&emsp;8. 启动、监视、维护系统</p><p>&emsp;&emsp;9. 以上清单可以随时调整</p>]]></content>
-      
-      
+      <tags>
+        <tag>Arch</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何升级hexo的next主题</title>
+    <url>/2019/04/24/%E5%A6%82%E4%BD%95%E5%8D%87%E7%BA%A7hexo%E7%9A%84next%E4%B8%BB%E9%A2%98/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;自从毕业之后，Milo一直忙于工作，无暇管理独立博客。最近沉迷于机器学习实战，Milo想以博文的形式记录学习的心路历程，正好可以打理一下。</p>
+<p>&emsp;&emsp;更新了一下Hexo，Milo发现Next主题都已经到了7.0的时代。怎么更新主题呢？</p>
+<a id="more"></a>
+<h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>&emsp;&emsp;由于年代久远，主题需要跨好多个版本，咋一想有点头疼。读了<a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">hexo-theme-next</a>的<a href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/UPDATE-FROM-5.1.X.md" target="_blank" rel="noopener">升级指引</a>，Milo发现其实蛮简单的嘛~</p>
+<h4 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h4><p>&emsp;&emsp;不论你手中正在做什么事情，首要任务就是备份！备份！备份！</p>
+<p>&emsp;&emsp;根据官方升级指引，你需要备份的内容大概有一下4项：</p>
+<ol>
+<li>_config.yml配置文件（<font color=#FF0000><code>最重要！</code></font>）</li>
+<li>自定义的CSS样式文件（位于next/source/css/_custom/<em> 和 next/source/css/_variables/</em>）</li>
+<li>自定义的主题文件（位于next/layout/_custom/*）</li>
+<li>其他可能修改过的文件（可用文档对比工具进行排查）</li>
+</ol>
+<h4 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h4><ul>
+<li><strong>获取主题</strong></li>
+</ul>
+<p>&emsp;&emsp;获取主题的方式有两种：</p>
+<p>&emsp;&emsp;第一种升级方式：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">直接下载源文件包，放在&#x2F;themes目录下</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;第二种升级方式：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next themes&#x2F;next-reloaded</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;建议使用第一种升级方式。Milo使用双仓库备份独立博客（非双分支）。最初以第二种方式进行升级，发现推送源文件到Github时提醒要使用</p>
+<p><font color=#FF0000><code>git submodule</code></font>命令。添加子项目后，修改的文本似乎无法上传。因此改用第一种升级方式，简单快捷（不要把时间浪费在无所谓的事情上面 :) ）。</p>
+<ul>
+<li><strong>更换主题</strong></li>
+</ul>
+<p>&emsp;&emsp;修改根目录下<font color=#FF0000><code>_config.yml</code></font>文件，设置<font color=#FF0000><code>theme: next-reloaded</code></font>。至此，主题升级完毕。</p>
+<h4 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h4><p>&emsp;&emsp;启动<font color=#FF0000><code>hexo s</code></font>命令，检查命令行是否已经没有警告，而且主题也成功升级。</p>
+<p>&emsp;&emsp;一切正常之后，根据备份的<font color=#FF0000><code>_config.yml</code></font>文件对新主题进行配置。</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>&emsp;&emsp;待补充。</p>
+]]></content>
       <categories>
-          
-          <category> AI </category>
-          
+        <category>Share</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> AI </tag>
-            
-            <tag> Tensorflow </tag>
-            
-            <tag> CNN </tag>
-            
-            <tag> Kaggle </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>为什么梯度方向是函数局部上升最快的方向</title>
-      <link href="/2019/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%A2%AF%E5%BA%A6%E6%96%B9%E5%90%91%E6%98%AF%E5%87%BD%E6%95%B0%E5%B1%80%E9%83%A8%E4%B8%8A%E5%8D%87%E6%9C%80%E5%BF%AB%E7%9A%84%E6%96%B9%E5%90%91/"/>
-      <url>/2019/04/25/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%A2%AF%E5%BA%A6%E6%96%B9%E5%90%91%E6%98%AF%E5%87%BD%E6%95%B0%E5%B1%80%E9%83%A8%E4%B8%8A%E5%8D%87%E6%9C%80%E5%BF%AB%E7%9A%84%E6%96%B9%E5%90%91/</url>
-      
-        <content type="html"><![CDATA[<p>&emsp;&emsp;谈机器学习，免不了要讲损失函数；讲损失函数，避不开梯度下降；运用梯度下降，必先确定梯度方向。为什么梯度方向是函数局部上升最快的方向？</p><a id="more"></a><p>&emsp;&emsp;这里首先引入<a href="https://baike.baidu.com/item/泰勒公式" target="_blank" rel="noopener">泰勒公式</a>：若函数f(x)在包含\(x_0\)的某个闭区间[a,b]上具有n阶导数，且在开区间(a,b)上具有(n+1)阶导数，则对闭区间[a,b]上任意一点x，成立下式：<script type="math/tex">f(x) = f(x_0) + \frac{f'(x_0)}{1!}(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + ... + \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n + R_n(x)</script></p><p>&emsp;&emsp;其中，\(f^{(n)}(x)\)表示f(x)的n阶导数，等号后的多项式称为函数f(x)在\(x_0\)处的泰勒展开式，剩余的\(R_n(x)\)是泰勒公式的余项，是\((x-x_0)^n\)的高阶无穷小。</p><p>&emsp;&emsp;因此，根据泰勒公式有，<script type="math/tex">f(x + \Delta x) - f(x) ≈ \nabla f(x)^T\Delta x</script></p><p>&emsp;&emsp;公式左边为“函数增量”，即“函数局部上升的量”，它在什么时候取最大值呢？</p><p>&emsp;&emsp;这里引入<a href="https://baike.baidu.com/item/点积" target="_blank" rel="noopener">点积的几何定义</a>：设二维空间内有两个向量\(\vec{a}\)和\(\vec{b}\)，\(|\vec{a}|\)和\(|\vec{b}|\)表示向量\(\vec{a}\)和\(\vec{b}\)的大小，它们的夹角为\(\theta(0 ≤ \theta ≤ \pi)\)，则内积定义为以下实数：<script type="math/tex">\vec{a} \cdot \vec{b} = |\vec{a}||\vec{b}|\cos\theta</script></p><p>&emsp;&emsp;综上所述，结合梯度下降，可知\(\nabla f(x)^T\)和\(\Delta x\)都是向量，当梯度向量\(\nabla f(x)^T\)和\(\Delta x\)的方向相同时(\(\theta = 0\))，点积最大为1，即函数局部上升的量最大。所以梯度方向是函数局部上升最快的方向。</p><p>&emsp;&emsp;所以，在做梯度下降算法的时候，使用的是梯度方向的<font color='red'><code>反方向！</code></font></p>]]></content>
-      
-      
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Upgrade</tag>
+        <tag>Themes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何备份Hexo博客</title>
+    <url>/2018/01/30/%E5%A6%82%E4%BD%95%E5%A4%87%E4%BB%BDHexo%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;网上已经有很多关于如何备份Hexo博客的教程，不过大部分都是使用同一个Github仓库创建双分支的方法。</p>
+<p>&emsp;&emsp;倘若你喜欢这种方法，请直接出门右转找谷歌。Milo使用的是两个不同的Github仓库，其中一个用来发布Hexo博客静态页面，另一个则用来备份博客的源文件。</p>
+<p>&emsp;&emsp;当Milo想到博客备份问题的时候，已经将Hexo博客建好了。所以，Milo在本文中不会赘述如何搭建Hexo博客以及如何使用Hexo发布文章。</p>
+<p>&emsp;&emsp;Milo将会以最简洁的方式讲述如何备份Hexo博客。<br><a id="more"></a></p>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>&emsp;&emsp;首先，创建两个仓库：</p>
+<ul>
+<li><p>Hexo博客静态页面仓库：choibunbing.github.io.git</p>
+<blockquote>
+<p>分支：master</p>
+</blockquote>
+</li>
+<li><p>Hexo博客源码仓库：choibunbing.com.git</p>
+<blockquote>
+<p>分支：master</p>
+</blockquote>
+</li>
+</ul>
+<p>&emsp;&emsp;然后，进入Hexo博客根目录，拉取远程Hexo博客源码仓库：</p>
+<ul>
+<li>根目录：choibunbing.com<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd &#x2F;choibunbing.com</span><br><span class="line">$ git init</span><br><span class="line">$ git remote add origin git@github.com:choibunbing&#x2F;choibunbing.com.git</span><br><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure></li>
+<li>检查Hexo博客根目录中是否有<font color=#FF0000><code>.gitignore</code></font>文件。若没有此文件，请自行创建。Milo的<font color=#FF0000><code>.gitignore</code></font>文件内容如下：<blockquote>
+<p>.DS_Store<br><br>Thumbs.db<br><br>db.json<br><br><em>.log<br><br>node_modules/<br><br>public/<br><br>.deploy</em>/<br></p>
+</blockquote>
+</li>
+</ul>
+<p>最后，提交Hexo博客源码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m &quot;第一次博客备份。&quot;</span><br><span class="line">$ git push origin master</span><br></pre></td></tr></table></figure></p>
+<h4 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h4><p>&emsp;&emsp;以后使用拉取命令便能同步远程源码仓库：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure></p>
+]]></content>
       <categories>
-          
-          <category> AI </category>
-          
+        <category>Share</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> AI </tag>
-            
-            <tag> Gradient Descent </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>如何升级hexo的next主题</title>
-      <link href="/2019/04/24/%E5%A6%82%E4%BD%95%E5%8D%87%E7%BA%A7hexo%E7%9A%84next%E4%B8%BB%E9%A2%98/"/>
-      <url>/2019/04/24/%E5%A6%82%E4%BD%95%E5%8D%87%E7%BA%A7hexo%E7%9A%84next%E4%B8%BB%E9%A2%98/</url>
-      
-        <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;自从毕业之后，Milo一直忙于工作，无暇管理独立博客。最近沉迷于机器学习实战，Milo想以博文的形式记录学习的心路历程，正好可以打理一下。</p><p>&emsp;&emsp;更新了一下Hexo，Milo发现Next主题都已经到了7.0的时代。怎么更新主题呢？</p><a id="more"></a><h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>&emsp;&emsp;由于年代久远，主题需要跨好多个版本，咋一想有点头疼。读了<a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener">hexo-theme-next</a>的<a href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/UPDATE-FROM-5.1.X.md" target="_blank" rel="noopener">升级指引</a>，Milo发现其实蛮简单的嘛~</p><h4 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h4><p>&emsp;&emsp;不论你手中正在做什么事情，首要任务就是备份！备份！备份！</p><p>&emsp;&emsp;根据官方升级指引，你需要备份的内容大概有一下4项：</p><ol><li>_config.yml配置文件（<font color=#FF0000><code>最重要！</code></font>）</li><li>自定义的CSS样式文件（位于next/source/css/_custom/<em> 和 next/source/css/_variables/</em>）</li><li>自定义的主题文件（位于next/layout/_custom/*）</li><li>其他可能修改过的文件（可用文档对比工具进行排查）</li></ol><h4 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h4><ul><li><strong>获取主题</strong></li></ul><p>&emsp;&emsp;获取主题的方式有两种：</p><p>&emsp;&emsp;第一种升级方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">直接下载源文件包，放在&#x2F;themes目录下</span><br></pre></td></tr></table></figure></p><p>&emsp;&emsp;第二种升级方式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next themes&#x2F;next-reloaded</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;建议使用第一种升级方式。Milo使用双仓库备份独立博客（非双分支）。最初以第二种方式进行升级，发现推送源文件到Github时提醒要使用</p><p><font color=#FF0000><code>git submodule</code></font>命令。添加子项目后，修改的文本似乎无法上传。因此改用第一种升级方式，简单快捷（不要把时间浪费在无所谓的事情上面 :) ）。</p><ul><li><strong>更换主题</strong></li></ul><p>&emsp;&emsp;修改根目录下<font color=#FF0000><code>_config.yml</code></font>文件，设置<font color=#FF0000><code>theme: next-reloaded</code></font>。至此，主题升级完毕。</p><h4 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h4><p>&emsp;&emsp;启动<font color=#FF0000><code>hexo s</code></font>命令，检查命令行是否已经没有警告，而且主题也成功升级。</p><p>&emsp;&emsp;一切正常之后，根据备份的<font color=#FF0000><code>_config.yml</code></font>文件对新主题进行配置。</p><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>&emsp;&emsp;待补充。</p>]]></content>
-      
-      
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Backup</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>导入FaceNet的一些坑</title>
+    <url>/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/</url>
+    <content><![CDATA[<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>&emsp;&emsp;FacenNet是谷歌提出的一种新的人脸识别的方法，该方法在LFW数据集上的准确度已经达到了99.65%。</p>
+<p>&emsp;&emsp;<a href="https://arxiv.org/pdf/1503.03832" target="_blank" rel="noopener">FaceNet论文</a></p>
+<p>&emsp;&emsp;<a href="https://github.com/davidsandberg/facenet" target="_blank" rel="noopener">FaceNet实现</a></p>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>&emsp;&emsp;上个周末，Milo在FaceNet的导入上踩了整整两天的坑，包括开发环境，源代码报错，运行异常等等。希望本文的粗糙填坑可以帮助到更多和Milo一样的人工智障爱好者和初学者。</p>
+<a id="more"></a>
+<ul>
+<li>开发环境（显卡：GeForce RTX 2060 6G）</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">方案一</th>
+<th style="text-align:left">方案二</th>
+<th style="text-align:left">方案三</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">tensorflow-gpu</td>
+<td style="text-align:left">1.13.1</td>
+<td style="text-align:left">1.7.0</td>
+<td style="text-align:left">1.7.0</td>
+</tr>
+<tr>
+<td style="text-align:left">cudatoolkit</td>
+<td style="text-align:left">10.0.130</td>
+<td style="text-align:left">9.0</td>
+<td style="text-align:left">8.0</td>
+</tr>
+<tr>
+<td style="text-align:left">cudnn</td>
+<td style="text-align:left">7.3.1</td>
+<td style="text-align:left">7.1.2</td>
+<td style="text-align:left">7.1.3</td>
+</tr>
+<tr>
+<td style="text-align:left">python</td>
+<td style="text-align:left">3.7.3</td>
+<td style="text-align:left">3.6.8</td>
+<td style="text-align:left">3.6.8</td>
+</tr>
+<tr>
+<td style="text-align:left">结果</td>
+<td style="text-align:left">compare.py：成功<br>validate_on_lfw.py：失败</td>
+<td style="text-align:left">compare.py：失败<br>validate_on_lfw.py：成功</td>
+<td style="text-align:left">无法调用GPU<br>CPU运行两个文件均成功</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>代码需要修改的地方：</li>
+</ul>
+<p>&emsp;&emsp;但凡需要用到GPU的地方都加上：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># session中</span></span><br><span class="line">gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)</span><br><span class="line">                  sess = tf.Session(</span><br><span class="line">                         config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=<span class="literal">False</span>))</span><br><span class="line"><span class="comment"># parse_arguments(argv)中</span></span><br><span class="line">parser.add_argument(<span class="string">'--gpu_memory_fraction'</span>, type=float,</span><br><span class="line">                        help=<span class="string">'Upper bound on the amount of GPU memory that will be used by the process.'</span>, default=<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;facenet.py中：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># create_input_pipeline(input_queue, image_size, nrof_preprocess_threads, batch_size_placeholder)中，所有代码都缩进到scope内。</span></span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'tempscope'</span>):</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;detect_face.py中：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 87行附近，添加allow_pickle=True。</span></span><br><span class="line">data_dict = np.load(data_path, allow_pickle=<span class="literal">True</span>, encoding=<span class="string">'latin1'</span>).item()  <span class="comment"># pylint: disable=no-member</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>坑一：</li>
+</ul>
+<blockquote>
+<p>Attempting to use uninitialized value InceptionResnetV1/Repeat_1/block17_4/Branch_1/Conv2d_0b_1x7/weights</p>
+</blockquote>
+<p>&emsp;&emsp;解决方案：启动参数设置成具体的模型.pb文件。如果设置成文件夹，程序会使用ckpt和meta文件，于是就会出现各种Attempting to use uninitialized value的情况。</p>
+<ul>
+<li>坑二：</li>
+</ul>
+<blockquote>
+<p>Loaded runtime CuDNN library: 7600 (compatibility version 7600) but source was compiled with 7102 (compatibility version 7100). If using a binary install, upgrade your CuDNN library to match. If building from sources, make sure the library loaded at runtime matches a compatible version specified during compile configuration.</p>
+</blockquote>
+<p>&emsp;&emsp;解决方案：将cudnn版本降至7.1.2。Milo在Anaconda环境中尝试了各种版本，其中7.1.3和7.0.5不会报这个错，但是7.1.3会自动安装CUDA8.0版本，7.0.5又会出现其他异常，所以在Milo的电脑上只能选择7.1.2版本。</p>
+<ul>
+<li>坑三：</li>
+</ul>
+<blockquote>
+<p>Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA</p>
+</blockquote>
+<p>&emsp;&emsp;解决方案：下载官方Tensorflow源文件进行重新编译和安装。(在此，Milo未做处理，因为这是个Warning，当时只做了方案查询，还有大坑需要填。)</p>
+<ul>
+<li>坑四：</li>
+</ul>
+<blockquote>
+<p>freeze_graph.py用途</p>
+</blockquote>
+<p>&emsp;&emsp;总结：在长时间无法解决&gt;&gt;坑二&lt;&lt;的情况下，总感觉应该寻找载入参数的办法。这和常规Python开发真的有很大不同，正常情况下在命令行自定义参数即可，可这是神经网络的参数，如何将模型中的参数载入呢？山穷水复疑无路，柳暗花明又一村！Milo搜索了freeze_graph.py的用途，发现训练好的模型正是通过此文件将参数整合到模型中，最终生成.pb文件。所以，&gt;&gt;坑二&lt;&lt;顺其自然地解决了！</p>
+<ul>
+<li>坑五：</li>
+</ul>
+<blockquote>
+<p>could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR</p>
+</blockquote>
+<p>&emsp;&emsp;实际情况一：当tensorflow-gpu版本&gt;1.8时就会出现这个异常。</p>
+<p>&emsp;&emsp;实际情况二：看到CUDNN_OOXX_OOXX时，在代码中设置session的gpu_options可以解决部分问题。</p>
+<ul>
+<li>坑六：</li>
+</ul>
+<blockquote>
+<p>InternalError (see above for traceback): Blas SGEMM launch failed</p>
+</blockquote>
+<p>&emsp;&emsp;总结：要么显卡太新，要么CUDNN版本问题。</p>
+]]></content>
       <categories>
-          
-          <category> Share </category>
-          
+        <category>AI</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Hexo </tag>
-            
-            <tag> Upgrade </tag>
-            
-            <tag> Themes </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>设计模式</title>
-      <link href="/2019/04/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-      <url>/2019/04/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
-      
-        <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>GOF根据模式的目标将模式分为三个类目：创建型、行为型和结构型。</p><h4 id="具体内容"><a href="#具体内容" class="headerlink" title="具体内容"></a>具体内容</h4><a id="more"></a><ul><li><strong>创建型</strong></li></ul><blockquote><p>创建型模式设计对象的实例化，这类模式的特点是，不让用户依赖于对象的创建或排列方式，避免用户直接使用new运算符创建对象。</p></blockquote><ol><li>工厂方法模式&lt;/br&gt;定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。</li><li>抽象工厂模式&lt;/br&gt;提供一个创建一系列或相互依赖对象的接口，而无须指定它们具体的类。</li><li>生成器模式&lt;/br&gt;将一个复杂对象的创建与它的表示分离，使得同样的创建过程可以创建不同的表示。</li><li>原型模式&lt;/br&gt;将原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。</li><li>单件模式&lt;/br&gt;保证一个类仅有一个实例，并提供一个访问它的全局访问点。</li></ol><ul><li><strong>行为型</strong></li></ul><blockquote><p>行为模式涉及怎样合理地设计对象之间的交互通信，以及怎样合理为对象分配职责，让设计富有弹性，易维护和易复用。</p></blockquote><ol><li>责任链模式&lt;/br&gt;使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。</li><li>命令模式&lt;/br&gt;将一个请求封装为一个对象，从而可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。</li><li>解释器模式&lt;/br&gt;给定一个语言，定义它文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。</li><li>迭代器模式&lt;/br&gt;提供一种方法顺序访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。</li><li>中介者模式&lt;/br&gt;用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显示地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</li><li>备忘录模式&lt;/br&gt;在不破坏封装性的情况下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样以后就可将该对象恢复到原先保存的状态。</li><li>观察者模式&lt;/br&gt;定义对象间的一种一对多的依赖关系，当一个对象的状态发生变化时，所有依赖于它的对象都得到通知并被自动更新。</li><li>状态模式&lt;/br&gt;允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。</li><li>策略模式&lt;/br&gt;定义一系列算法，把它们一个个封装起来，并且可使它们可以相互替换。策略模式使算法可独立于使用它的客户而变化。</li><li>模板方法模式&lt;/br&gt;定义一个操作中算法的骨架，而将一些步骤延迟到子类中。模板方法使子类可以不改变一个算法的结构即可定义该算法的某些特定步骤。</li><li>访问者模式&lt;/br&gt;表示一个作用于某对象结构中的各个元素的操作。它可以在不改变各个元素的类的前提下定义作用于这些元素的新操作。</li></ol><ul><li><strong>结构型</strong></li></ul><blockquote><p>结构型模式涉及如何组合类和对象以形成更大的结构，和类有关的结构型模式设计如何合理地使用继承机制；和对象有关的结构型模式涉及如何合理地使用对象组合机制。</p></blockquote><ol><li>适配器模式&lt;/br&gt;将一个类的接口转换成客户希望的另外一个接口。Adapter模式使原本由于接口不兼容而不能一起工作的那些类可以一起工作。</li><li>组合模式&lt;/br&gt;将对象组合成数形结构以表示”部分-整体“的层次结构。Composite使用户对单个对象和组合对象的使用具有一致性。</li><li>代理模式&lt;/br&gt;为其他对象提供一种代理以控制对这个对象的访问。</li><li>享元模式&lt;/br&gt;运用共享技术有效地支持大量细粒度的对象。</li><li>外观模式&lt;/br&gt;为系统的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使这一子系统更加容易使用。</li><li>装饰模式&lt;/br&gt;动态地给对象添加一些额外的职责，就功能来说装饰模式相比生成子类更为灵活。</li></ol>]]></content>
-      
-      
+      <tags>
+        <tag>AI</tag>
+        <tag>FaceNet</tag>
+        <tag>Tensorflow</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机器学习常用算法</title>
+    <url>/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;初学机器学习的时候，Milo毫无方向感。看过Ng的机器学习，看过《机器学习实战》，看过《西瓜书》，虽然对机器学习有个大概的了解，但仍无法很熟练地说出每个算法的具体内容，以及算法所属类别。</p>
+<p>&emsp;&emsp;无意间，在CSDN上找到了一份大纲，感觉豁然开朗。特此转载，日后将逐渐完善每个算法的相关学习和介绍。</p>
+<p>&emsp;&emsp;以下是算法大纲：</p>
+<a id="more"></a>
+<blockquote>
+<p>资料来源：CSDN</p>
+</blockquote>
+<h4 id="监督学习-Supervised-learning"><a href="#监督学习-Supervised-learning" class="headerlink" title="监督学习(Supervised learning)"></a>监督学习(Supervised learning)</h4><ul>
+<li>人工神经网络 Artificial neural network<ul>
+<li>自动编码器 Autoencoder</li>
+<li>反向传播 Backpropagation</li>
+<li>玻尔兹曼机 Boltzmann machine</li>
+<li>卷积神经网络 Convolutional neural network</li>
+<li>Hopfield网络 Hopfield network</li>
+<li>多层感知器 Multilayer perceptron</li>
+<li>径向基函数网络（RBFN） Radial basis function network(RBFN)</li>
+<li>受限玻尔兹曼机 Restricted Boltzmann machine</li>
+<li>回归神经网络（RNN） Recurrent neural network(RNN)</li>
+<li>自组织映射（SOM） Self-organizing map(SOM)</li>
+<li>尖峰神经网络 Spiking neural network</li>
+</ul>
+</li>
+<li>贝叶斯 Bayesian<ul>
+<li>朴素贝叶斯 Naive Bayes</li>
+<li>高斯贝叶斯 Gaussian Naive Bayes</li>
+<li>多项朴素贝叶斯 Multinomial Naive Bayes</li>
+<li>平均一依赖性评估（AODE） Averaged One-Dependence Estimators(AODE)</li>
+<li>贝叶斯信念网络（BNN） Bayesian Belief Network(BBN)</li>
+<li>贝叶斯网络（BN） Bayesian Network(BN)</li>
+</ul>
+</li>
+<li>决策树 Decision Tree<ul>
+<li>分类和回归树（CART） Classification and regression tree (CART)</li>
+<li>迭代Dichotomiser 3（ID3） Iterative Dichotomiser 3(ID3)</li>
+<li>C4.5算法 C4.5 algorithm</li>
+<li>C5.0算法 C5.0 algorithm</li>
+<li>卡方自动交互检测（CHAID） Chi-squared Automatic Interaction Detection(CHAID)</li>
+<li>决策残端 Decision stump</li>
+<li>ID3算法 ID3 algorithm</li>
+<li>随机森林 Random forest</li>
+<li>SLIQ</li>
+</ul>
+</li>
+<li>线性分类 Linear classifier<ul>
+<li>Fisher的线性判别 Fisher’s linear discriminant</li>
+<li>线性回归 Linear regression</li>
+<li>Logistic回归 Logistic regression</li>
+<li>多项Logistic回归 Multinomial logistic regression</li>
+<li>朴素贝叶斯分类器 Naive Bayes classifier</li>
+<li>感知 Perceptron</li>
+<li>支持向量机 Support vector machine</li>
+</ul>
+</li>
+</ul>
+<h4 id="无监督学习-Unsupervised-learning"><a href="#无监督学习-Unsupervised-learning" class="headerlink" title="无监督学习(Unsupervised learning)"></a>无监督学习(Unsupervised learning)</h4><ul>
+<li>人工神经网络 Artificial neural network<ul>
+<li>对抗生成网络</li>
+<li>前馈神经网络 Feedforward neurral network</li>
+<li>极端学习机 Extreme learning machine</li>
+<li>逻辑学习机 Logic learning machine</li>
+<li>自组织映射 Self-organizing map</li>
+</ul>
+</li>
+<li>关联规则学习 Association rule learning<ul>
+<li>先验算法 Apriori algorithm</li>
+<li>Eclat算法 Eclat algorithm</li>
+<li>FP-growth算法 FP-growth algorithm</li>
+</ul>
+</li>
+<li>分层聚类 Hierarchical clustering<ul>
+<li>单连锁聚类 Single-linkage clustering</li>
+<li>概念聚类 Conceptual clustering</li>
+</ul>
+</li>
+<li>聚类分析 Cluster analysis<ul>
+<li>BIRCH</li>
+<li>DBSCAN</li>
+<li>期望最大化（EM） Expectation-maximization(EM)</li>
+<li>模糊聚类 Fuzzy clustering</li>
+<li>K-means算法 K-means algorithm</li>
+<li>k-均值聚类 K-means clustering</li>
+<li>k-位数 K-medians</li>
+<li>平均移 Mean-shift</li>
+<li>OPTICS算法 OPTICS algorithm</li>
+</ul>
+</li>
+<li>异常检测 Anomaly detection<ul>
+<li>k-最近邻算法（K-NN） k-nearest neighbors classification(K-NN)</li>
+<li>局部异常因子 Local outlier factor</li>
+</ul>
+</li>
+</ul>
+<h4 id="半监督学习-Semi-supervised-learning"><a href="#半监督学习-Semi-supervised-learning" class="headerlink" title="半监督学习(Semi-supervised learning)"></a>半监督学习(Semi-supervised learning)</h4><ul>
+<li>生成模型 Generative models</li>
+<li>低密度分离 Low-density separation</li>
+<li>基于图形的方法 Graph-based methods</li>
+<li>联合训练 Co-training</li>
+</ul>
+<h4 id="强化学习-Reinforcement-learning"><a href="#强化学习-Reinforcement-learning" class="headerlink" title="强化学习(Reinforcement learning)"></a>强化学习(Reinforcement learning)</h4><ul>
+<li>时间差分学习 Temporal difference learning</li>
+<li>Q学习 Q-learning</li>
+<li>学习自动 Learning Automata</li>
+<li>状态-行动-回馈-状态-行动（SARSA） State-Action-Reward-State-Action(SARSA)</li>
+</ul>
+<h4 id="深度学习-Deep-learning"><a href="#深度学习-Deep-learning" class="headerlink" title="深度学习(Deep learning)"></a>深度学习(Deep learning)</h4><ul>
+<li>深度信念网络 Deep belief machines</li>
+<li>深度卷积神经网络 Deep Convolutional neural networks</li>
+<li>深度递归神经网络 Deep Recurrent neural networks</li>
+<li>分层时间记忆 Hierarchical temporal memory</li>
+<li>深度玻尔兹曼机（DBM） Deep Boltzmann Machine(DBM)</li>
+<li>堆叠自动编码器 Stacked Boltzmann Machine</li>
+<li>生成式对抗网络 Generative adversarial networks</li>
+</ul>
+<h4 id="迁移学习-Transfer-learning"><a href="#迁移学习-Transfer-learning" class="headerlink" title="迁移学习(Transfer learning)"></a>迁移学习(Transfer learning)</h4><ul>
+<li>传递式迁移学习 Transitive Transfer Learning</li>
+</ul>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li>集成学习算法<ul>
+<li>Bootstrap aggregating (Bagging)</li>
+<li>AdaBoost</li>
+<li>梯度提升机（GBM） Gradient boosting machine(GBM)</li>
+<li>梯度提升决策树（GBRT） Gradient boosted decision tree(GBRT)</li>
+</ul>
+</li>
+<li>降维<ul>
+<li>主成分分析（PCA） Principal component analysis(PCA)</li>
+<li>主成分回归（PCR） Principal component regression(PCR)</li>
+<li>因子分析 Factor analysis</li>
+</ul>
+</li>
+</ul>
+]]></content>
       <categories>
-          
-          <category> Java </category>
-          
+        <category>AI</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Design Patterns </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>机器学习常用算法</title>
-      <link href="/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/"/>
-      <url>/2019/04/24/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95/</url>
-      
-        <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;初学机器学习的时候，Milo毫无方向感。看过Ng的机器学习，看过《机器学习实战》，看过《西瓜书》，虽然对机器学习有个大概的了解，但仍无法很熟练地说出每个算法的具体内容，以及算法所属类别。</p><p>&emsp;&emsp;无意间，在CSDN上找到了一份大纲，感觉豁然开朗。特此转载，日后将逐渐完善每个算法的相关学习和介绍。</p><p>&emsp;&emsp;以下是算法大纲：</p><a id="more"></a><blockquote><p>资料来源：CSDN</p></blockquote><h4 id="监督学习-Supervised-learning"><a href="#监督学习-Supervised-learning" class="headerlink" title="监督学习(Supervised learning)"></a>监督学习(Supervised learning)</h4><ul><li>人工神经网络 Artificial neural network<ul><li>自动编码器 Autoencoder</li><li>反向传播 Backpropagation</li><li>玻尔兹曼机 Boltzmann machine</li><li>卷积神经网络 Convolutional neural network</li><li>Hopfield网络 Hopfield network</li><li>多层感知器 Multilayer perceptron</li><li>径向基函数网络（RBFN） Radial basis function network(RBFN)</li><li>受限玻尔兹曼机 Restricted Boltzmann machine</li><li>回归神经网络（RNN） Recurrent neural network(RNN)</li><li>自组织映射（SOM） Self-organizing map(SOM)</li><li>尖峰神经网络 Spiking neural network</li></ul></li><li>贝叶斯 Bayesian<ul><li>朴素贝叶斯 Naive Bayes</li><li>高斯贝叶斯 Gaussian Naive Bayes</li><li>多项朴素贝叶斯 Multinomial Naive Bayes</li><li>平均一依赖性评估（AODE） Averaged One-Dependence Estimators(AODE)</li><li>贝叶斯信念网络（BNN） Bayesian Belief Network(BBN)</li><li>贝叶斯网络（BN） Bayesian Network(BN)</li></ul></li><li>决策树 Decision Tree<ul><li>分类和回归树（CART） Classification and regression tree (CART)</li><li>迭代Dichotomiser 3（ID3） Iterative Dichotomiser 3(ID3)</li><li>C4.5算法 C4.5 algorithm</li><li>C5.0算法 C5.0 algorithm</li><li>卡方自动交互检测（CHAID） Chi-squared Automatic Interaction Detection(CHAID)</li><li>决策残端 Decision stump</li><li>ID3算法 ID3 algorithm</li><li>随机森林 Random forest</li><li>SLIQ</li></ul></li><li>线性分类 Linear classifier<ul><li>Fisher的线性判别 Fisher’s linear discriminant</li><li>线性回归 Linear regression</li><li>Logistic回归 Logistic regression</li><li>多项Logistic回归 Multinomial logistic regression</li><li>朴素贝叶斯分类器 Naive Bayes classifier</li><li>感知 Perceptron</li><li>支持向量机 Support vector machine</li></ul></li></ul><h4 id="无监督学习-Unsupervised-learning"><a href="#无监督学习-Unsupervised-learning" class="headerlink" title="无监督学习(Unsupervised learning)"></a>无监督学习(Unsupervised learning)</h4><ul><li>人工神经网络 Artificial neural network<ul><li>对抗生成网络</li><li>前馈神经网络 Feedforward neurral network</li><li>极端学习机 Extreme learning machine</li><li>逻辑学习机 Logic learning machine</li><li>自组织映射 Self-organizing map</li></ul></li><li>关联规则学习 Association rule learning<ul><li>先验算法 Apriori algorithm</li><li>Eclat算法 Eclat algorithm</li><li>FP-growth算法 FP-growth algorithm</li></ul></li><li>分层聚类 Hierarchical clustering<ul><li>单连锁聚类 Single-linkage clustering</li><li>概念聚类 Conceptual clustering</li></ul></li><li>聚类分析 Cluster analysis<ul><li>BIRCH</li><li>DBSCAN</li><li>期望最大化（EM） Expectation-maximization(EM)</li><li>模糊聚类 Fuzzy clustering</li><li>K-means算法 K-means algorithm</li><li>k-均值聚类 K-means clustering</li><li>k-位数 K-medians</li><li>平均移 Mean-shift</li><li>OPTICS算法 OPTICS algorithm</li></ul></li><li>异常检测 Anomaly detection<ul><li>k-最近邻算法（K-NN） k-nearest neighbors classification(K-NN)</li><li>局部异常因子 Local outlier factor</li></ul></li></ul><h4 id="半监督学习-Semi-supervised-learning"><a href="#半监督学习-Semi-supervised-learning" class="headerlink" title="半监督学习(Semi-supervised learning)"></a>半监督学习(Semi-supervised learning)</h4><ul><li>生成模型 Generative models</li><li>低密度分离 Low-density separation</li><li>基于图形的方法 Graph-based methods</li><li>联合训练 Co-training</li></ul><h4 id="强化学习-Reinforcement-learning"><a href="#强化学习-Reinforcement-learning" class="headerlink" title="强化学习(Reinforcement learning)"></a>强化学习(Reinforcement learning)</h4><ul><li>时间差分学习 Temporal difference learning</li><li>Q学习 Q-learning</li><li>学习自动 Learning Automata</li><li>状态-行动-回馈-状态-行动（SARSA） State-Action-Reward-State-Action(SARSA)</li></ul><h4 id="深度学习-Deep-learning"><a href="#深度学习-Deep-learning" class="headerlink" title="深度学习(Deep learning)"></a>深度学习(Deep learning)</h4><ul><li>深度信念网络 Deep belief machines</li><li>深度卷积神经网络 Deep Convolutional neural networks</li><li>深度递归神经网络 Deep Recurrent neural networks</li><li>分层时间记忆 Hierarchical temporal memory</li><li>深度玻尔兹曼机（DBM） Deep Boltzmann Machine(DBM)</li><li>堆叠自动编码器 Stacked Boltzmann Machine</li><li>生成式对抗网络 Generative adversarial networks</li></ul><h4 id="迁移学习-Transfer-learning"><a href="#迁移学习-Transfer-learning" class="headerlink" title="迁移学习(Transfer learning)"></a>迁移学习(Transfer learning)</h4><ul><li>传递式迁移学习 Transitive Transfer Learning</li></ul><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul><li>集成学习算法<ul><li>Bootstrap aggregating (Bagging)</li><li>AdaBoost</li><li>梯度提升机（GBM） Gradient boosting machine(GBM)</li><li>梯度提升决策树（GBRT） Gradient boosted decision tree(GBRT)</li></ul></li><li>降维<ul><li>主成分分析（PCA） Principal component analysis(PCA)</li><li>主成分回归（PCR） Principal component regression(PCR)</li><li>因子分析 Factor analysis</li></ul></li></ul>]]></content>
-      
-      
+      <tags>
+        <tag>Machine Learning</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用CNN实现Digit Reconizer总结</title>
+    <url>/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h4 id="背景简介"><a href="#背景简介" class="headerlink" title="背景简介"></a>背景简介</h4><p>&emsp;&emsp;本文实现的是Kaggle竞赛平台上Getting Started级别的Digit Reconizer（即MNIST）。使用Tensorflow搭建了5层卷积神经网络（Convolutional Neural Network，简称CNN），最终取得测试成绩是0.98742。</p>
+<a id="more"></a>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><ul>
+<li>导入相关的包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line">from sklearn.preprocessing import OneHotEncoder</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;本文使用了numpy，pandas，scikit-learn，以及tensorflow包。其中numpy主要用于处理数据格式；pandas主要用于读写文件；使用scikit-learn包进行One-Hot格式处理；Tensorflow负责CNN的搭建及运行。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong> 未进行数据可视化和数据清理工作。</p>
+<ul>
+<li>读取数据，并查看内容</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 读取训练集</span><br><span class="line">train &#x3D; pd.read_csv(&quot;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;train.csv&quot;)</span><br><span class="line"># 读取测试集</span><br><span class="line">test &#x3D; pd.read_csv(&quot;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;test.csv&quot;)</span><br><span class="line"></span><br><span class="line"># shape:(42000,785)</span><br><span class="line">train_df &#x3D; train.copy()</span><br><span class="line">test_df &#x3D; test.copy()</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;首先使用pandas的read_csv()方法读取训练集和测试集，然后通过describe()和info()方法查看训练集的格式为(42000,785)，其中第一列为训练集标签（即Label）,剩余784列是手写图像的数据（因为图片大小是28*28）。</p>
+<p>&emsp;&emsp;使用了copy()方法的初衷是防止未来操作修改了原始数据。后来经查阅相关资料发现Python中存在引用（=）、浅拷贝（copy()）、深拷贝的差别（deepcopy()）。正确的应该是使用deepcopy()对原始数据进行深拷贝，这样Python会重新创建一个对象，对新对象的任何修改都不会影响到原始对象。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong> copy()方法使用错误，应该使用deepcopy()方法。</p>
+<ul>
+<li>格式化数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 根据需求格式化训练集</span><br><span class="line"># x_train.shape -&gt;  (42000, 784)</span><br><span class="line">x_train &#x3D; train_df.drop([&#39;label&#39;], axis&#x3D;1).values.reshape([-1, 784]).astype(np.float32)</span><br><span class="line"># y_train.shape -&gt;  (42000, 1)</span><br><span class="line"># y_train[0]    -&gt;  [1.]</span><br><span class="line">y_train &#x3D; train_df[&#39;label&#39;].values.reshape([-1, 1]).astype(np.float32)</span><br><span class="line"></span><br><span class="line"># one-hot using scikit-learn</span><br><span class="line"># onehot_encoded.shape -&gt; (42000, 10)</span><br><span class="line"># onehot_encoded[0] -&gt;  [0. 1. 0. 0. 0. 0. 0. 0. 0. 0.]</span><br><span class="line">onehot_encoded &#x3D; OneHotEncoder(sparse&#x3D;False).fit_transform(y_train)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;格式化数据时应该注意以下几点：</p>
+<p>&emsp;&emsp;0. 格式化要和占位符的格式匹配，否则喂数据的时候会出错。</p>
+<p>&emsp;&emsp;1. 数据类型需要是float32或者float64，实验中报错提示的信息，具体为什么暂时没研究。</p>
+<p>&emsp;&emsp;2. 训练集标签（Label），即此处的y_train，需要做One-Hot处理。此处采用scikit-learn包装的方法。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 刚入门，对数据格式没有足够的重视，实验中发现它是最重要的环节之一！</p>
+<p>&emsp;&emsp;1. 实际上代码的正确顺序应该是先写占位符，再根据占位符的shape进行训练集数据的格式化工作。</p>
+<p>&emsp;&emsp;2. One-Hot算法有多种实现方式，其一是自定义实现；其二是scikit-learn包；其三Tensorflow包也提供算法支持。未来要有能力对One-Hot算法信手拈来。</p>
+<p>&emsp;&emsp;3. 对数据格式认识不足，其实还有更简便的格式化方式，例如，x_train=train_df.iloc[:, 1:].values一步到位。</p>
+<ul>
+<li>定义占位符，喂数据时使用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 占位符</span><br><span class="line">x_ &#x3D; tf.placeholder(dtype&#x3D;tf.float32, shape&#x3D;[None, 784])</span><br><span class="line">y_ &#x3D; tf.placeholder(dtype&#x3D;tf.float32, shape&#x3D;[None, 10])</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;要注意的是，占位符的shape要和喂神经网络的数据格式匹配。</p>
+<p>&emsp;&emsp;<strong>经验：</strong> （若你和Milo一样曾经研究方向是分布式）可以把神经网络当成一个分布式系统，作业被分成许多个基本任务shuffle到各个节点上。其实，基本任务就是确定\(f(x) = wx + b\)的参数，此处参数不是向量，而节点就是一个个神经元。输入和输出有多少个节点，就有多少个任务，也就确定了向量的维度。</p>
+<ul>
+<li>定义神经网络的基本单元</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&quot;&quot;</span><br><span class="line">定义变量</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def weight(shape):</span><br><span class="line">    return tf.Variable(tf.truncated_normal(shape, stddev&#x3D;0.1))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def bias(shape):</span><br><span class="line">    return tf.Variable(tf.constant(0.1, shape&#x3D;shape))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">定义层</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def conf2d(x, w):</span><br><span class="line">    return tf.nn.conv2d(x, w, strides&#x3D;[1, 1, 1, 1], padding&#x3D;&#39;SAME&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def max_pool(x):</span><br><span class="line">    return tf.nn.max_pool(x, ksize&#x3D;[1, 2, 2, 1], strides&#x3D;[1, 2, 2, 1], padding&#x3D;&#39;SAME&#39;)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;此处Milo定义了权重、偏置、卷积层以及Max Pooling层，其中偏置项取常量0.1；卷基层的步伐是1，填充方式为SAME；Max Pooling层核大小是2*2，步伐为2，填充方式同样是SAME。</p>
+<p>&emsp;&emsp;这里有必要解释一下卷积层输出大小的计算：</p>
+<p>&emsp;&emsp;1. 教科书上，以及视频教程手推卷积层大小公式为：\(f(x) = \frac{Input - Filter + 2 * Padding}{Stride} + 1\)</p>
+<p>&emsp;&emsp;2. Tensorflow中,SAME填充方式的卷积层输出大小计算公式为：\(f(x) = \lceil \frac{W}{Stride} \rceil\)，跟Filter和Padding没半毛钱关系.</p>
+<p>&emsp;&emsp;3. Tensorflow中,VALID填充方式的卷积层输出大小计算公式为：\(f(x) = \lceil \frac{W - Filter + 1}{Stride} \rceil\)</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 起初写代码的时候完全没考虑重构。在没定义神经网络的基本单元的时候，整段代码乱成一锅粥，十分不利于代码调试，同时也阻碍对神经网络模型的理解。所以，<font color='red'><code>强烈建议进行重构工作！</code></font></p>
+<p>&emsp;&emsp;1. 计算输出输出格式不熟练。根据卷积层和Max Pooling层的参数，需要提前规划神经网络模型中每一层的大小，正确计算每一层的输出，否则将会出现意想不到的惊（yi）喜（chang）。</p>
+<ul>
+<li>定义神经网络模型</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># SAME:输出大小等于输入大小除以步长向上取整，s是步长大小；</span><br><span class="line"># VALID:输出大小等于输入大小减去滤波器大小加上1，最后再除以步长（f为滤波器的大小，s是步长大小）。</span><br><span class="line"># 第一层 28*28*1 -&gt; 14*14*32</span><br><span class="line">x_images &#x3D; tf.reshape(x_, [-1, 28, 28, 1])</span><br><span class="line">w_conv1 &#x3D; weight([5, 5, 1, 32])</span><br><span class="line">b_conv1 &#x3D; bias([32])</span><br><span class="line">h_1 &#x3D; tf.nn.sigmoid(conf2d(x_images, w_conv1) + b_conv1)</span><br><span class="line">p_1 &#x3D; max_pool(h_1)</span><br><span class="line"># 第二层 14*14*32 -&gt; 7*7*64</span><br><span class="line">w_conv2 &#x3D; weight([5, 5, 32, 64])</span><br><span class="line">b_conv2 &#x3D; bias([64])</span><br><span class="line">h_2 &#x3D; tf.nn.sigmoid(conf2d(p_1, w_conv2) + b_conv2)</span><br><span class="line">p_2 &#x3D; max_pool(h_2)</span><br><span class="line"># 第三层 7*7*64 -&gt; 4*4*128</span><br><span class="line">w_conv3 &#x3D; weight([5, 5, 64, 128])</span><br><span class="line">b_conv3 &#x3D; bias([128])</span><br><span class="line">h_3 &#x3D; tf.nn.sigmoid(conf2d(p_2, w_conv3) + b_conv3)</span><br><span class="line">p_3 &#x3D; max_pool(h_3)</span><br><span class="line"># 第四层 4*4*128 -&gt; 1*1024</span><br><span class="line">w_fc1 &#x3D; weight([4 * 4 * 128, 1024])</span><br><span class="line">b_fc1 &#x3D; bias([1024])</span><br><span class="line">h_fc1 &#x3D; tf.nn.sigmoid(tf.matmul(tf.reshape(p_3, [-1, 4 * 4 * 128]), w_fc1) + b_fc1)</span><br><span class="line"># 第五层 1*1024 -&gt; 1*10</span><br><span class="line">w_fc2 &#x3D; weight([1024, 10])</span><br><span class="line">b_fc2 &#x3D; bias([10])</span><br><span class="line">y_conv &#x3D; tf.matmul(h_fc1, w_fc2) + b_fc2</span><br><span class="line"># tf.nn.softmax_cross_entropy_with_logits做了softmax和交叉熵</span><br><span class="line">prediction &#x3D; tf.nn.softmax(tf.matmul(h_fc1, w_fc2) + b_fc2)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<strong>经验：</strong></p>
+<p>&emsp;&emsp;0. 卷积核的深度需要是2的N次幂。（他人经验借鉴）</p>
+<p>&emsp;&emsp;1. tf.reshape()的维度参数中，-1表示不定义张量的维度。第一层中张量的维度将被reshape为42000维。</p>
+<p>&emsp;&emsp;2. 每一层中做的操作包括：图片信息和权重w做卷积操作 —&gt; 卷积结果加上偏置项做激活操作 —&gt; 经过激活函数的结果进行Pooling操作。</p>
+<p>&emsp;&emsp;3. 预测时，只关心softmax结果，所以图片数据直接喂prediction即可。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 没有重构成独立的模块。最初抽象成独立模块的时候，Milo对输入数据的格式定义不熟悉，出现了各种异常，所以决定拆开，优先确保程序成功运行。</p>
+<p>&emsp;&emsp;1. 对最后全连接的定义不清晰。究竟什么时候开始全连接？</p>
+<ul>
+<li>定义结果需要使用的数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cross_entropy &#x3D; -tf.reduce_sum(y_ * tf.log(y_conv))</span><br><span class="line">loss &#x3D; tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels&#x3D;y_, logits&#x3D;y_conv))</span><br><span class="line">train_step &#x3D; tf.train.GradientDescentOptimizer(learning_rate&#x3D;0.1).minimize(loss)</span><br><span class="line">correct_prediction &#x3D; tf.equal(tf.argmax(y_conv, axis&#x3D;1), tf.argmax(y_, axis&#x3D;1))</span><br><span class="line">accuracy &#x3D; tf.reduce_mean(tf.cast(correct_prediction, dtype&#x3D;tf.float32))</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;0. 训练过程是要是损失函数取最小值，此处是对<font color = 'red'><strong>softmax</strong></font>结果做<font color = 'red'><strong>交叉熵</strong></font>，然后进行<font color = 'red'><strong>均值降维</strong></font>。</p>
+<p>&emsp;&emsp;1. 精度计算是对比<font color = 'red'><strong>训练集标签</strong></font>和<font color = 'red'><strong>实际标签</strong></font>。</p>
+<ul>
+<li>题外话</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># batch</span><br><span class="line"># no batch cause: CUDNN_STATUS_INTERNAL_ERROR</span><br><span class="line"># The value of a feed cannot be a tf.Tensor object.</span><br><span class="line"># (&quot;shuffle_batch:0&quot;, shape&#x3D;(100, 42000, 784), dtype&#x3D;float32)</span><br><span class="line"># (&quot;Placeholder:0&quot;, shape&#x3D;(?, 784), dtype&#x3D;float32).</span><br><span class="line"># images, labels &#x3D; tf.train.shuffle_batch([x_train, onehot_encoded],</span><br><span class="line">#                                         batch_size&#x3D;100,</span><br><span class="line">#                                         num_threads&#x3D;6,</span><br><span class="line">#                                         capacity&#x3D;int(50000 * 0.4 + 3 * 100),</span><br><span class="line">#                                         min_after_dequeue&#x3D;1000</span><br><span class="line">#                                         )</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<strong>经验：</strong></p>
+<p>&emsp;&emsp;0. 在训练神经网络模型的时候出现OOM的情况，想使用tf.train.shuffle_batch分批处理，结果出现异常：”The value of a feed cannot be a tf.Tensor object.”。</p>
+<p>&emsp;&emsp;1. 神经网络模型的输入和输出一定刚要和喂的数据维度相匹配！</p>
+<ul>
+<li>运行训练，并保存结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">config &#x3D; tf.ConfigProto()</span><br><span class="line">config.gpu_options.per_process_gpu_memory_fraction &#x3D; 0.7  # maximun alloc gpu50% of MEM</span><br><span class="line">config.gpu_options.allow_growth &#x3D; True  # allocate dynamically</span><br><span class="line">with tf.Session(config&#x3D;config) as sess:</span><br><span class="line">    # for i in range(100):</span><br><span class="line">    #     if i % 10 &#x3D;&#x3D; 0:</span><br><span class="line">    #         train_accuracy &#x3D; accuracy.eval(session&#x3D;sess, feed_dict&#x3D;&#123;x_: x_train, y_: onehot_encoded&#125;)</span><br><span class="line">    #</span><br><span class="line">    #     print(&quot;train_accuracy %g&quot; % train_accuracy)</span><br><span class="line">    #     train_step.run(session&#x3D;sess, feed_dict&#x3D;&#123;x_: x_train, y_: y_train&#125;)</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">    # 迭代20次，每次都把全部数据分成42000&#x2F;128个批次，分批喂入tf</span><br><span class="line">    for epoch in range(20):</span><br><span class="line">        print(&#39;epoch&#39;, epoch + 1)</span><br><span class="line">        for batch in range(int(len(x_train) &#x2F; 128)):</span><br><span class="line">            batch_x &#x3D; x_train[batch * 128:(batch + 1) * 128]</span><br><span class="line">            batch_y &#x3D; onehot_encoded[batch * 128:(batch + 1) * 128]</span><br><span class="line">            sess.run(train_step, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;)</span><br><span class="line"></span><br><span class="line">        batch_x &#x3D; x_train[int(len(x_train) &#x2F; 128) * 128:]</span><br><span class="line">        batch_y &#x3D; onehot_encoded[int(len(x_train) &#x2F; 128) * 128:]</span><br><span class="line"></span><br><span class="line">        sess.run(train_step, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;)</span><br><span class="line">        print(&quot;accuracy: %f&quot; % sess.run(accuracy, feed_dict&#x3D;&#123;x_: batch_x, y_: batch_y&#125;))</span><br><span class="line"></span><br><span class="line">    tf.train.Saver().save(sess, &quot;&#x2F;home&#x2F;milo&#x2F;Github&#x2F;machinelearning&#x2F;digit_recognizer&#x2F;mnist_model.ckpt&quot;)</span><br><span class="line"></span><br><span class="line">    tf.train.Saver().restore(sess, &quot;&#x2F;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;mnist_model.ckpt&quot;)</span><br><span class="line">    x_test &#x3D; test_df.values.reshape([-1, 784]).astype(np.float32)</span><br><span class="line">    # 直接跑图的最后一步: softmax计算能力</span><br><span class="line">    result &#x3D; sess.run(prediction, feed_dict&#x3D;&#123;x_: x_test&#125;)</span><br><span class="line">    label_test &#x3D; np.argmax(result, axis&#x3D;1)</span><br><span class="line">    # pd.DataFrame(label_test).to_csv(&quot;&#x2F;&#x2F;&#123;你的数据文件存放位置&#125;&#x2F;digit_recognizer&#x2F;test_result.csv&quot;)</span><br><span class="line"></span><br><span class="line">    # 保存结果</span><br><span class="line">    submission &#x3D; pd.DataFrame(&#123;</span><br><span class="line">        &quot;ImageId&quot;: np.arange(1, 28000 + 1),</span><br><span class="line">        &quot;Label&quot;: label_test</span><br><span class="line">    &#125;)</span><br><span class="line">    submission.to_csv(&quot;&#x2F;home&#x2F;milo&#x2F;Github&#x2F;machinelearning&#x2F;digit_recognizer&#x2F;test_result.csv&quot;, index&#x3D;False)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<strong>经验：</strong></p>
+<p>&emsp;&emsp;0. 某个人没安装CUDA，还瞎吉儿Debug得很欢快，以为程序写错了！</p>
+<p>&emsp;&emsp;1. 一次性将42000张图片喂到5层神经网络结构中会出现OOM的情况，所以措施一是设置GPU内存使用阈值0.7；措施二是使用小批量处理。</p>
+<p>&emsp;&emsp;2. 小批量处理需要注意一个细节：最后一批需要在循环外单独处理。</p>
+<p>&emsp;&emsp;3. 注意输出精确度的print写法，是使用sess.run()运行accuracy方程。</p>
+<p>&emsp;&emsp;4. 使用tf.train.Saver()可以保存模型，参数是tf.session()，需要指定模型文件的存储位置。</p>
+<p>&emsp;&emsp;5. 上传Kaggle时需要注意，Kaggle要求CSV文件中要带有标签，所以需要自定义。注意细节：”ImageId”: np.arange(1, 28000 + 1)，Id从1开始，直接写死就行了。</p>
+<p>&emsp;&emsp;<strong>缺陷：</strong></p>
+<p>&emsp;&emsp;0. 代码需要重构。</p>
+<p>&emsp;&emsp;1. 流程需要梳理清楚。<strong>训练</strong>跑的是<font color = 'red'><strong>优化器取损失函数最小是</strong></font>的方程；打印<strong>精确度</strong>跑的是<font color = 'red'><strong>对比预测值</strong></font>的方程；<strong>测试</strong>是直接跑神经网络模型最后的<font color = 'red'><strong>softmax</strong></font>方程。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><ul>
+<li><p>硬件：</p>
+<ul>
+<li><p>I5-9400F</p>
+</li>
+<li><p>16G DDR4</p>
+</li>
+<li><p>七彩虹RTX 2060 6G Ultra OC</p>
+</li>
+</ul>
+</li>
+<li><p>软件：</p>
+<ul>
+<li><p>Anaconda(Python3.7.3) 1.7.2</p>
+</li>
+<li><p>Tensorflow 1.13.1</p>
+</li>
+<li><p>Pycharm 2019.1</p>
+</li>
+<li><p>cudatoolkit 10.0.130 (运用显卡的计算能力，很重要！！！)</p>
+</li>
+<li><p>cudnn 7.3.1</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><p>待补充</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>&emsp;&emsp;机器学习项目清单（摘录自《机器学习实战 基于Scikit-Learn和Tensorflow》）</p>
+<p>&emsp;&emsp;1. 架构问题，关注蓝图</p>
+<p>&emsp;&emsp;2. 获取数据</p>
+<p>&emsp;&emsp;3. 研究数据以获取灵感</p>
+<p>&emsp;&emsp;4. 准备数据以更好地将低层模型暴露给机器学习</p>
+<p>&emsp;&emsp;5. 研究各种不同的模型，并列出最好的模型</p>
+<p>&emsp;&emsp;6. 微调模型，并将其组合为最好的解决方案</p>
+<p>&emsp;&emsp;7. 提出解决方案</p>
+<p>&emsp;&emsp;8. 启动、监视、维护系统</p>
+<p>&emsp;&emsp;9. 以上清单可以随时调整</p>
+]]></content>
       <categories>
-          
-          <category> AI </category>
-          
+        <category>AI</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Machine Learning </tag>
-            
-            <tag> Algorithm </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>八个步骤教你成功安装ArchLinux系统</title>
-      <link href="/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/"/>
-      <url>/2018/06/20/%E5%85%AB%E4%B8%AA%E6%AD%A5%E9%AA%A4%E6%95%99%E4%BD%A0%E6%88%90%E5%8A%9F%E5%AE%89%E8%A3%85ArchLinux%E7%B3%BB%E7%BB%9F/</url>
-      
-        <content type="html"><![CDATA[<h4 id="本文实验环境"><a href="#本文实验环境" class="headerlink" title="本文实验环境"></a>本文实验环境</h4><div class="table-container"><table><thead><tr><th style="text-align:center">配件</th><th style="text-align:center">配置</th></tr></thead><tbody><tr><td style="text-align:center">硬件</td><td style="text-align:center">神舟笔记本K650D-i5 D3</td></tr><tr><td style="text-align:center">硬盘</td><td style="text-align:center">西数(WDC WD10JPLX-00MBPT0)</td></tr><tr><td style="text-align:center">U盘制作软件</td><td style="text-align:center">USBWriter</td></tr><tr><td style="text-align:center">Arch系统ISO</td><td style="text-align:center">archlinux-2018.06.01-x86_64</td></tr></tbody></table></div><p><strong>注意：本文使用UEFI方式安装Arch Linux，所以首先请检查电脑是否支持UEFI启动。BIOS/MBR启动方式请不要继续往下看。</strong><br><a id="more"></a></p><h4 id="具体的八个步骤"><a href="#具体的八个步骤" class="headerlink" title="具体的八个步骤"></a>具体的八个步骤</h4><ul><li><p><strong>步骤一：下载Arch系统ISO，并制作U盘启动工</strong></p></li><li><p><strong>步骤二：U盘启动，进入live系统并联网</strong></p><p>无线网络shell（本文使用无线网络）：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wifi-menu</span><br></pre></td></tr></table></figure><p>ADS网络shell（未测试，仅供参考）：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pppoe-setup</span><br></pre></td></tr></table></figure><p>或</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start adsl</span><br></pre></td></tr></table></figure><p>连接之后，使用<font color=#FF0000><code>ping</code></font>命令查看网络是否联通。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping www.google.com</span><br></pre></td></tr></table></figure></li><li><p><strong>步骤三：同步系统时间</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timedatectl set-ntp true</span><br></pre></td></tr></table></figure></li><li><p><strong>步骤四：编辑镜像站的文件</strong></p><p>打开文件：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano &#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist</span><br></pre></td></tr></table></figure><p>将<font color=#FF0000><code>中国</code></font>的镜像站放在<font color=#FF0000><code>最前面</code></font>！</p></li><li><p><strong>步骤五：磁盘分区</strong></p><p>可以使用的工具：fdisk、ldisk、cfdisk。</p><p>本文使用fdisk将磁盘分为两个区，包括/boot启动分区和/根分区，其中/boot分区500M，/根分区900G。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--查看磁盘--&gt;</span><br><span class="line">lsblk</span><br><span class="line"></span><br><span class="line">&lt;!--fdisk分区--&gt;</span><br><span class="line">fdisk &#x2F;dev&#x2F;sda</span><br><span class="line"></span><br><span class="line">&lt;!--新建GPT分区表--&gt;</span><br><span class="line">g</span><br><span class="line"></span><br><span class="line">&lt;!--新建分区--&gt;</span><br><span class="line">n</span><br><span class="line"></span><br><span class="line">&lt;!--分区序号，默认回车即可--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--第一个扇区的位置，默认回车即可--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--最后一个扇区的位置，&#x2F;boot分区+500M，&#x2F;根分区+900G--&gt;</span><br><span class="line">+500M</span><br><span class="line"></span><br><span class="line">&lt;!--全部分区完毕，保存并退出--&gt;</span><br><span class="line">w</span><br></pre></td></tr></table></figure><p>分区完毕使用<font color=#FF0000><code>lsblk</code></font>查看磁盘分区情况。</p></li><li><p><strong>步骤六：格式化分区，并挂载</strong></p><p>由于使用UEFI启动方式，需要ESP分区，因此/boot分区使用<font color=#FF0000><code>mkfs.fat -F32</code></font>进行格式化。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--格式化&#x2F;boot分区（ESP分区）--&gt;</span><br><span class="line">mkfs.fat -F32 &#x2F;dev&#x2F;sda1</span><br><span class="line"></span><br><span class="line">&lt;!--格式化&#x2F;根分区--&gt;</span><br><span class="line">mkfs.ext4 &#x2F;dev&#x2F;sda2</span><br><span class="line"></span><br><span class="line">&lt;!--挂载&#x2F;根分区--&gt;</span><br><span class="line">mount &#x2F;dev&#x2F;sda2 &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--创建&#x2F;boot文件夹--&gt;</span><br><span class="line">mkdir &#x2F;mnt&#x2F;boot</span><br><span class="line"></span><br><span class="line">&lt;!--挂载&#x2F;boot分区--&gt;</span><br><span class="line">mount &#x2F;dev&#x2F;sda1 &#x2F;mnt&#x2F;boot</span><br></pre></td></tr></table></figure><p>最后使用<font color=#FF0000><code>lsblk</code></font>查看磁盘分区情况。</p></li><li><p><strong>步骤七：安装Arch系统</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacstrap -i &#x2F;mnt base base-devel</span><br></pre></td></tr></table></figure></li><li><p><strong>步骤八：配置系统</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--配置fstab，如果fstab文件已存在，可以删除该文件后重新追加内容--&gt;</span><br><span class="line">genfstab -U &#x2F;mnt &gt;&gt; &#x2F;mnt&#x2F;etc&#x2F;fstab</span><br><span class="line"></span><br><span class="line">&lt;!--配置新系统--&gt;</span><br><span class="line">&lt;!--进入新系统--&gt;</span><br><span class="line">arch-chroot &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--语言设置，反注释en_US.UTF-8 UTF-8和zh_CN.UTF-8 UTF-8--&gt;</span><br><span class="line">nano &#x2F;etc&#x2F;locale.gen</span><br><span class="line">locale-gen</span><br><span class="line">echo LANG&#x3D;en_US.UTF-8 &gt; &#x2F;etc&#x2F;locale.config</span><br><span class="line"></span><br><span class="line">&lt;!--设置时区，选择顺序4 9 1 1--&gt;</span><br><span class="line">tzselect</span><br><span class="line"></span><br><span class="line">&lt;!--设置硬件时间--&gt;</span><br><span class="line">hwclock --systohc --utc</span><br><span class="line"></span><br><span class="line">&lt;!--设置root密码--&gt;</span><br><span class="line">passwd</span><br><span class="line"></span><br><span class="line">&lt;!--新建用户，并设置用户密码，添加用户权限--&gt;</span><br><span class="line">useradd -m -g users -s &#x2F;bin&#x2F;bash 用户名</span><br><span class="line">passwd 用户名</span><br><span class="line">nano &#x2F;etc&#x2F;sudoers</span><br><span class="line"></span><br><span class="line">&lt;!--至关重要的一步：配置引导系统--&gt;</span><br><span class="line">&lt;!--安装引导工具--&gt;</span><br><span class="line">pacman -S dosfstools grub efibootmgr</span><br><span class="line">&lt;!--安装grub并写入设置文件，EFI路径为ESP分区--&gt;</span><br><span class="line">grub-install --target&#x3D;x86_64-efi --efi-directory&#x3D;&#x2F;boot --recheck</span><br><span class="line">grub-mkconfig -o &#x2F;boot&#x2F;grub&#x2F;grub.cfg</span><br></pre></td></tr></table></figure><p>至此，Arch Linux系统基本安装完毕，可以直接重启系统，亦可配置完网络和桌面后再重启系统。网络和桌面的配置非本文重点，因此暂不赘述，还请查阅相关Wiki。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--卸载--&gt;</span><br><span class="line">umount -R &#x2F;mnt</span><br><span class="line"></span><br><span class="line">&lt;!--重启--&gt;</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure></li></ul>]]></content>
-      
-      
+      <tags>
+        <tag>AI</tag>
+        <tag>Tensorflow</tag>
+        <tag>CNN</tag>
+        <tag>Kaggle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式</title>
+    <url>/2019/04/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>GOF根据模式的目标将模式分为三个类目：创建型、行为型和结构型。</p>
+<h4 id="具体内容"><a href="#具体内容" class="headerlink" title="具体内容"></a>具体内容</h4><a id="more"></a>
+<ul>
+<li><strong>创建型</strong></li>
+</ul>
+<blockquote>
+<p>创建型模式设计对象的实例化，这类模式的特点是，不让用户依赖于对象的创建或排列方式，避免用户直接使用new运算符创建对象。</p>
+</blockquote>
+<ol>
+<li>工厂方法模式&lt;/br&gt;定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method使一个类的实例化延迟到其子类。</li>
+<li>抽象工厂模式&lt;/br&gt;提供一个创建一系列或相互依赖对象的接口，而无须指定它们具体的类。</li>
+<li>生成器模式&lt;/br&gt;将一个复杂对象的创建与它的表示分离，使得同样的创建过程可以创建不同的表示。</li>
+<li>原型模式&lt;/br&gt;将原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。</li>
+<li>单件模式&lt;/br&gt;保证一个类仅有一个实例，并提供一个访问它的全局访问点。</li>
+</ol>
+<ul>
+<li><strong>行为型</strong></li>
+</ul>
+<blockquote>
+<p>行为模式涉及怎样合理地设计对象之间的交互通信，以及怎样合理为对象分配职责，让设计富有弹性，易维护和易复用。</p>
+</blockquote>
+<ol>
+<li>责任链模式&lt;/br&gt;使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。</li>
+<li>命令模式&lt;/br&gt;将一个请求封装为一个对象，从而可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。</li>
+<li>解释器模式&lt;/br&gt;给定一个语言，定义它文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。</li>
+<li>迭代器模式&lt;/br&gt;提供一种方法顺序访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。</li>
+<li>中介者模式&lt;/br&gt;用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显示地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</li>
+<li>备忘录模式&lt;/br&gt;在不破坏封装性的情况下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样以后就可将该对象恢复到原先保存的状态。</li>
+<li>观察者模式&lt;/br&gt;定义对象间的一种一对多的依赖关系，当一个对象的状态发生变化时，所有依赖于它的对象都得到通知并被自动更新。</li>
+<li>状态模式&lt;/br&gt;允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。</li>
+<li>策略模式&lt;/br&gt;定义一系列算法，把它们一个个封装起来，并且可使它们可以相互替换。策略模式使算法可独立于使用它的客户而变化。</li>
+<li>模板方法模式&lt;/br&gt;定义一个操作中算法的骨架，而将一些步骤延迟到子类中。模板方法使子类可以不改变一个算法的结构即可定义该算法的某些特定步骤。</li>
+<li>访问者模式&lt;/br&gt;表示一个作用于某对象结构中的各个元素的操作。它可以在不改变各个元素的类的前提下定义作用于这些元素的新操作。</li>
+</ol>
+<ul>
+<li><strong>结构型</strong></li>
+</ul>
+<blockquote>
+<p>结构型模式涉及如何组合类和对象以形成更大的结构，和类有关的结构型模式设计如何合理地使用继承机制；和对象有关的结构型模式涉及如何合理地使用对象组合机制。</p>
+</blockquote>
+<ol>
+<li>适配器模式&lt;/br&gt;将一个类的接口转换成客户希望的另外一个接口。Adapter模式使原本由于接口不兼容而不能一起工作的那些类可以一起工作。</li>
+<li>组合模式&lt;/br&gt;将对象组合成数形结构以表示”部分-整体“的层次结构。Composite使用户对单个对象和组合对象的使用具有一致性。</li>
+<li>代理模式&lt;/br&gt;为其他对象提供一种代理以控制对这个对象的访问。</li>
+<li>享元模式&lt;/br&gt;运用共享技术有效地支持大量细粒度的对象。</li>
+<li>外观模式&lt;/br&gt;为系统的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使这一子系统更加容易使用。</li>
+<li>装饰模式&lt;/br&gt;动态地给对象添加一些额外的职责，就功能来说装饰模式相比生成子类更为灵活。</li>
+</ol>
+]]></content>
       <categories>
-          
-          <category> Share </category>
-          
+        <category>Java</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Arch </tag>
-            
-            <tag> Linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>如何备份Hexo博客</title>
-      <link href="/2018/01/30/%E5%A6%82%E4%BD%95%E5%A4%87%E4%BB%BDHexo%E5%8D%9A%E5%AE%A2/"/>
-      <url>/2018/01/30/%E5%A6%82%E4%BD%95%E5%A4%87%E4%BB%BDHexo%E5%8D%9A%E5%AE%A2/</url>
-      
-        <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;网上已经有很多关于如何备份Hexo博客的教程，不过大部分都是使用同一个Github仓库创建双分支的方法。</p><p>&emsp;&emsp;倘若你喜欢这种方法，请直接出门右转找谷歌。Milo使用的是两个不同的Github仓库，其中一个用来发布Hexo博客静态页面，另一个则用来备份博客的源文件。</p><p>&emsp;&emsp;当Milo想到博客备份问题的时候，已经将Hexo博客建好了。所以，Milo在本文中不会赘述如何搭建Hexo博客以及如何使用Hexo发布文章。</p><p>&emsp;&emsp;Milo将会以最简洁的方式讲述如何备份Hexo博客。<br><a id="more"></a></p><h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>&emsp;&emsp;首先，创建两个仓库：</p><ul><li><p>Hexo博客静态页面仓库：choibunbing.github.io.git</p><blockquote><p>分支：master</p></blockquote></li><li><p>Hexo博客源码仓库：choibunbing.com.git</p><blockquote><p>分支：master</p></blockquote></li></ul><p>&emsp;&emsp;然后，进入Hexo博客根目录，拉取远程Hexo博客源码仓库：</p><ul><li>根目录：choibunbing.com<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cd &#x2F;choibunbing.com</span><br><span class="line">$ git init</span><br><span class="line">$ git remote add origin git@github.com:choibunbing&#x2F;choibunbing.com.git</span><br><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure></li><li>检查Hexo博客根目录中是否有<font color=#FF0000><code>.gitignore</code></font>文件。若没有此文件，请自行创建。Milo的<font color=#FF0000><code>.gitignore</code></font>文件内容如下：<blockquote><p>.DS_Store<br><br>Thumbs.db<br><br>db.json<br><br><em>.log<br><br>node_modules/<br><br>public/<br><br>.deploy</em>/<br></p></blockquote></li></ul><p>最后，提交Hexo博客源码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m &quot;第一次博客备份。&quot;</span><br><span class="line">$ git push origin master</span><br></pre></td></tr></table></figure></p><h4 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h4><p>&emsp;&emsp;以后使用拉取命令便能同步远程源码仓库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull origin master</span><br></pre></td></tr></table></figure></p>]]></content>
-      
-      
+      <tags>
+        <tag>Design Patterns</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2020上半年问题总结</title>
+    <url>/2020/06/07/2020%E4%B8%8A%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;工作的时候，因为是内网开发，所以遇到难题Milo都记在纸上。原本想一月一发，事实上却因为各种缘由拖了大半年，一下子整理起来问题还真有点多。以下内容可以说是问题集锦，或者大杂烩了。</p>
+<a id="more"></a>
+<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><ul>
+<li><p>Front-End</p>
+<ul>
+<li><p>强制刷新<br>&emsp;答：使用this.$forceUpdate();</p>
+</li>
+<li><p>立即刷新绑定的数据<br>&emsp;答：使用this.$set(对象, 属性, 值);</p>
+</li>
+<li><p>Echarts3中，legend如何底部显示？<br>&emsp;答：可以使用x和y属性定位。例如：x: ‘center’, y: ‘bottom’</p>
+</li>
+<li><p>Echarts3中，坐标文字如何对齐刻度线？<br>&emsp;答：在xAxis或者yAxis中设置axisTick的属性alignWithLabel为true。</p>
+</li>
+<li><p>Echarts3中，如何调整图与外层的边距？<br>&emsp;答：调整grid中的left，top，right，bottom属性即可，无需调整div的边距。</p>
+</li>
+<li><p>Echarts3中，如何设置值为0时，不显示tooltip？<br>&emsp;答：设置formatter，值为0时，调整回调函数中的params参数。</p>
+</li>
+<li><p>Echarts3的柱状图中，如果某个y值为0，如何设置不显示它的x柱？<br>&emsp;答：略。</p>
+</li>
+<li><p>$nextTick()的作用？<br>&emsp;答：在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。因为Vue 实现响应式并不是数据发生变化之后 DOM 立即变化，而是按一定的策略进行 DOM 的更新。$nextTick 是在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后使用 $nextTick，则可以在回调中获取更新后的 DOM。</p>
+</li>
+<li><p>如何跨页面触发刷新？<br>&emsp;答：使用this.$root.eventHub.$emit、this.$root.eventHub.$on();、this.$root.eventHub.$off();。其中，this.$root.eventHub.$off()写在beforeDestroy(){}中。</p>
+</li>
+<li><p>vue中引用图片的方式？<br>&emsp;答：除了使用@/assets/路径以外，还可以先import图片，然后再引用。</p>
+</li>
+<li><p>正则表达式：/[,|.| ]|OR/<br>&emsp;答：[]中只匹配其中一个。｜右边匹配OR。整体解释是：匹配逗号，句号，空格，或者OR。</p>
+</li>
+<li><p>埋点的实现？<br>&emsp;答：略。</p>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>Back-End</p>
+<ul>
+<li><p>使用static变量，还是使用@Value，还是使用@PostConstruct？<br>&emsp;答：代码中尽量不要不出现魔法数值。取而代之使用取名的静态变量，或者配置。</p>
+</li>
+<li><p>Variable used in lambda expression should be final or effectively final异常。<br>&emsp;答：使用数组或者原子类型AtomicInteger。我通常是使用数组，因为有一次使用AtomicInteger时，出现了无法定位的数值不改变问题。</p>
+</li>
+<li><p>yml配置文件中，list或者set的写法？<br>&emsp;答：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">pets:</span></span><br><span class="line">	<span class="bullet">-</span> <span class="number">1</span></span><br><span class="line">	<span class="bullet">-</span> <span class="number">2</span></span><br><span class="line">	<span class="bullet">-</span> <span class="number">3</span></span><br><span class="line"><span class="string">//</span> <span class="string">或者</span></span><br><span class="line"><span class="attr">pets:</span> <span class="string">[1,2,3]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行docker的几种方式？</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start container</span><br><span class="line">docker <span class="built_in">exec</span> container</span><br><span class="line">docker run image</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何删除docker镜像？<br>&emsp;答：先使用rm删除容器，再使用rmi删除镜像。</p>
+</li>
+<li><p>使用poi-tl时，如何在同一个占位符上插入多张图片？<br>&emsp;答：首先，一定要是v1.7.0以上，如果要使用#this占位符，一定要v1.7.2以上。其次，修改模板文件，使用区块标签。</p>
+</li>
+<li><p>Json中，如何添加多个相同的key，但value值不同？<br>&emsp;答：多加一层JsonObject inner = new JsonObject();</p>
+</li>
+<li><p>Java8如何获取时间戳？<br>&emsp;答：LocalTime.now();</p>
+</li>
+<li><p>Java8中，Date类型如何转换成Temporal类型？<br>&emsp;答：Date.toInstant。</p>
+</li>
+<li><p>国密算法？<br>&emsp;答：略。有现成的jar包。bcprov-jdk15on的v1.64和hutool-all的5.2.5。</p>
+</li>
+<li><p>拷贝数组？<br>&emsp;答：使用System.arrayCopy(src, srcStart, target, targetStart, length);</p>
+</li>
+<li><p>IDEA重新编译/热部署？<br>&emsp;答：CTRL + F9或者JRebel插件。</p>
+</li>
+<li><p>如何进行自定义全局异常处理？<br>&emsp;答：首先创建@ControllerAdvice，其次创建@ExceptionHandler。</p>
+</li>
+<li><p>axis 2中关于RPC调用？<br>&emsp;答：略。</p>
+</li>
+<li><p>如何制作自定义starter？<br>&emsp;答：略。</p>
+</li>
+<li><p>@Cacheable和@CachePut的用法<br>&emsp;答：@CachePut可以确保方法被执行,同时方法的返回值也被记录到缓存中。@Cacheable当重复使用相同参数调用方法的时候，方法本身不会被调用执行，即方法本身被略过了，取而代之的是方法的结果直接从缓存中找到并返回了。@CachePut和@Cacheable这两个标签可以结合使用，当需要根据请求改变值的时候，利用@CachePut将值改变并写入到缓存中，而@Cacheable标签除了第一次之外，一直是取的缓存的值。注意：必须是同一个缓存实例。且，key值必须是相同的。</p>
+</li>
+<li><p>redisTemplate和stringRedisTemplate操作？<br>&emsp;答：redisTemplate是对象操作。stringRedisTemplate是字符串操作。</p>
+</li>
+<li><p>rabbitmq执行流程？<br>&emsp;答：rabbitmq——发送——交换器——交换器对应的queue。</p>
+</li>
+<li><p>actuator是什么？<br>&emsp;答：起到监控作用。另外，启动配置中，设置-verbose可以显示jvm启动详情。</p>
+</li>
+<li><p>Elasticsearch限制超过10000数据量的查询，如何解决？<br>&emsp;答：方法一：通过设置index 的设置参数max_result_window的值。方法二：使用scroll（游标）的方式进行查询。其中，方式二似乎无法进行翻页。</p>
+</li>
+<li><p>@Value(“${}”)和@Value(“#{}”)的区别？<br>&emsp;答：前者直接翻译成字符串。如果配置值为空，写法是@Value(“${配置项:默认配置}”)。后者是SpEL表达式，会解析内容。如果配置值为空，写法是@Value(“#{表达式?:默认值}”)。如果是在设置list的默认值，将list内容以逗号拼接即可。</p>
+</li>
+<li><p>如何导出mysql数据？<br>&emsp;答：mysqldump -u用戶名 -p密码 -d 数据库名 表名 &gt; 脚本名;</p>
+</li>
+<li><p>如何导入sql文件？<br>&emsp;答：进入mysql命令行，source A.sql;</p>
+</li>
+<li><p>SQL如何截取子字符串？<br>&emsp;答：substring(“AAA”, 0, 4);表示：从第0位开始，截取4位。</p>
+</li>
+<li><p>token的生成机制？<br>&emsp;答：略。</p>
+</li>
+<li><p>awk的用法？<br>&emsp;答：略。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h4><ol>
+<li>修改template和修改借口一样，一定要检查所有使用该组件的地方。</li>
+<li>算法有分布式和非分布式之分，在分布式环境下，要考虑选择的算法是否可用。</li>
+<li>编程的时候一定要有：分布式和大数据的思想，一定要考虑大数据量的情况。例如，前端要考虑显示X亿Y千万，后端要考虑使用多线程处理。</li>
+<li>编程步骤一定是：先写算法思想的注释，再编码。</li>
+<li>实现需求的步骤一定是：先重构现有的代码，再考虑能否最简单的实现方式，考虑后再进行实现。因为一味地添加代码，增加字段，最终只会使系统越来越臃肿，而变得无法维护。</li>
+<li>重构一定是：一个功能一段代码，提高代码复用。变量有时候是必不可少的，可以用于定位异常。</li>
+<li>代码中一定要有log输出，因为上了远程环境，很多时候通过log可以直接定位bug点。</li>
+<li>删除操作尽量不要使用xxxTemplate.delete()，要使用逻辑删除。例如，把某个字段置为1。</li>
+<li>删除数据时，要考虑效率问题。例如，删除7天前的数据，如果7天前的数据有好几十亿，删除操作会影响到业务流程的执行效率。应该考虑异步多线程操作会不会影响到当前的业务需求。</li>
+<li>如果列表中多个组件调用同一个弹出框，不能在for遍历里写弹出框，会导致弹出框组件数据异常，它会总是列表项最后一项。应该在for循环范围外，独立创建一个template。</li>
+<li>前端可以使用+ new Date()，其含义为转换数值。</li>
+<li>后端查询涉及统计/聚集时，可以采用定时写表，随时查询的形式进行。</li>
+<li>定时器的调用可以提取到一个单独的微服务中，首先避免直接调用正式环境的借口。其次，发布时可以独立发布，同样不影响系统运行。</li>
+<li>vue中使用watch时，如果设置了immediate为true。它在绑定时会立即执行，监控对象的值为空时也会执行handler。监控时应该判断具体的属性。</li>
+<li>后端修改CRUD代码时，应该时刻谨记数据的回填，保证整个CRUD流程数据回填的完整性。</li>
+<li>为了防止后端乱码问题，配置项和配置值尽量使用英文数字下划线。涉及中文时，提交代码和发布到线上环境，应该将中文转化成accii码。</li>
+<li>系统启动时，一般会将部分数据写入缓存中。应该考虑是否可以提供刷新缓存的接口，和刷新定时器一样，应该单独一个微服务。避免某些数据更新后，需要重启正式环境。</li>
+</ol>
+]]></content>
       <categories>
-          
-          <category> Share </category>
-          
+        <category>Summary</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Hexo </tag>
-            
-            <tag> Backup </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+      <tags>
+        <tag>Java</tag>
+        <tag>FAQ</tag>
+        <tag>Vue</tag>
+        <tag>Springboot</tag>
+      </tags>
+  </entry>
 </search>
