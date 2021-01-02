@@ -20,22 +20,23 @@
     var CONFIG = {"hostname":"choibunbing.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="简介&amp;emsp;&amp;emsp;FacenNet是谷歌提出的一种新的人脸识别的方法，该方法在LFW数据集上的准确度已经达到了99.65%。 &amp;emsp;&amp;emsp;FaceNet论文 &amp;emsp;&amp;emsp;FaceNet实现 正文&amp;emsp;&amp;emsp;上个周末，Milo在FaceNet的导入上踩了整整两天的坑，包括开发环境，源代码报错，运行异常等等。希望本文的粗糙填坑可以帮助到更多和Milo一样的">
+  <meta name="description" content="前言&amp;emsp;&amp;emsp;光阴荏苒，2020年即将成为历史！许多人都把这一年形容为“多灾多难的”的一年，对我而言，或许是，也或许不是。一方面，今年似乎都没见过美丽的夕阳，忙与不忙都在变相加班。另一方面，今年个人KPI顺利完成，值得庆贺！在这即将跨年之际，为了迎接美好的明天，现将下半年工作中遇到的问题及其解决方案总结如下：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="导入FaceNet的一些坑">
-<meta property="og:url" content="https://choibunbing.com/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/index.html">
+<meta property="og:title" content="2020下半年问题总结">
+<meta property="og:url" content="https://choibunbing.com/2020/12/27/2020%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Milo研究中心">
-<meta property="og:description" content="简介&amp;emsp;&amp;emsp;FacenNet是谷歌提出的一种新的人脸识别的方法，该方法在LFW数据集上的准确度已经达到了99.65%。 &amp;emsp;&amp;emsp;FaceNet论文 &amp;emsp;&amp;emsp;FaceNet实现 正文&amp;emsp;&amp;emsp;上个周末，Milo在FaceNet的导入上踩了整整两天的坑，包括开发环境，源代码报错，运行异常等等。希望本文的粗糙填坑可以帮助到更多和Milo一样的">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;光阴荏苒，2020年即将成为历史！许多人都把这一年形容为“多灾多难的”的一年，对我而言，或许是，也或许不是。一方面，今年似乎都没见过美丽的夕阳，忙与不忙都在变相加班。另一方面，今年个人KPI顺利完成，值得庆贺！在这即将跨年之际，为了迎接美好的明天，现将下半年工作中遇到的问题及其解决方案总结如下：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-07-21T02:10:34.000Z">
-<meta property="article:modified_time" content="2020-05-30T07:07:25.022Z">
+<meta property="article:published_time" content="2020-12-27T08:48:37.000Z">
+<meta property="article:modified_time" content="2021-01-02T13:10:21.241Z">
 <meta property="article:author" content="Milo Choi">
-<meta property="article:tag" content="AI">
-<meta property="article:tag" content="FaceNet">
-<meta property="article:tag" content="Tensorflow">
+<meta property="article:tag" content="FAQ">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Springboot">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://choibunbing.com/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/">
+<link rel="canonical" href="https://choibunbing.com/2020/12/27/2020%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
 
 
 <script id="page-configurations">
@@ -48,7 +49,7 @@
   };
 </script>
 
-  <title>导入FaceNet的一些坑 | Milo研究中心</title>
+  <title>2020下半年问题总结 | Milo研究中心</title>
   
 
 
@@ -169,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://choibunbing.com/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/">
+    <link itemprop="mainEntityOfPage" href="https://choibunbing.com/2020/12/27/2020%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -182,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          导入FaceNet的一些坑
+          2020下半年问题总结
         </h1>
 
         <div class="post-meta">
@@ -192,14 +193,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-21 10:10:34" itemprop="dateCreated datePublished" datetime="2019-07-21T10:10:34+08:00">2019-07-21</time>
+              <time title="创建时间：2020-12-27 16:48:37" itemprop="dateCreated datePublished" datetime="2020-12-27T16:48:37+08:00">2020-12-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-30 15:07:25" itemprop="dateModified" datetime="2020-05-30T15:07:25+08:00">2020-05-30</time>
+                <time title="修改时间：2021-01-02 21:10:21" itemprop="dateModified" datetime="2021-01-02T21:10:21+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,7 +208,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                  <a href="/categories/Summary/" itemprop="url" rel="index"><span itemprop="name">Summary</span></a>
                 </span>
             </span>
 
@@ -227,8 +228,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/21/%E5%AF%BC%E5%85%A5FaceNet%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/12/27/2020%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/27/2020%E4%B8%8B%E5%8D%8A%E5%B9%B4%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -243,107 +244,75 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>&emsp;&emsp;FacenNet是谷歌提出的一种新的人脸识别的方法，该方法在LFW数据集上的准确度已经达到了99.65%。</p>
-<p>&emsp;&emsp;<a href="https://arxiv.org/pdf/1503.03832" target="_blank" rel="noopener">FaceNet论文</a></p>
-<p>&emsp;&emsp;<a href="https://github.com/davidsandberg/facenet" target="_blank" rel="noopener">FaceNet实现</a></p>
-<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><p>&emsp;&emsp;上个周末，Milo在FaceNet的导入上踩了整整两天的坑，包括开发环境，源代码报错，运行异常等等。希望本文的粗糙填坑可以帮助到更多和Milo一样的人工智障爱好者和初学者。</p>
-<a id="more"></a>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;光阴荏苒，2020年即将成为历史！许多人都把这一年形容为“多灾多难的”的一年，对我而言，或许是，也或许不是。一方面，今年似乎都没见过美丽的夕阳，忙与不忙都在变相加班。另一方面，今年个人KPI顺利完成，值得庆贺！在这即将跨年之际，为了迎接美好的明天，现将下半年工作中遇到的问题及其解决方案总结如下：<br><a id="more"></a></p>
+<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><ul>
+<li><p>Front-End</p>
 <ul>
-<li>开发环境（显卡：GeForce RTX 2060 6G）</li>
+<li><p>substr(start, length)和substring(start, end)的区别？</p>
+<p>&emsp;答：注意看参数！substr是从第start位开始截取length位。而substring是截取start到end之间的字符串，属于半开区间：(start, end]。</p>
+</li>
+<li><p>Js网址的中文乱码如何处理？</p>
+<p>&emsp;答：使用encodeURI/encodeURIComponent编码，使用decodeURI/decodeURIComponent解码。其中，encodeURI除了常见的符号以外，对其他一些在网址中有特殊含义的符号”; / ? : @ &amp; = + $ , #”，也不进行编码。编码后，它输出符号的utf-8形式，并且在每个字节前加上%。encodeURIComponent与encodeURI()的区别是，它用于对URL的组成部分进行个别编码，而不用于对整个URL进行编码。</p>
+<p>​    另：（摘自阮一峰-<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2010/02/url_encoding.htm">关于URL编码</a>）实际上，escape()不能直接用于URL编码，它的真正作用是返回一个字符的Unicode编码值。”</p>
+</li>
 </ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th style="text-align:left">方案一</th>
-<th style="text-align:left">方案二</th>
-<th style="text-align:left">方案三</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">tensorflow-gpu</td>
-<td style="text-align:left">1.13.1</td>
-<td style="text-align:left">1.7.0</td>
-<td style="text-align:left">1.7.0</td>
-</tr>
-<tr>
-<td style="text-align:left">cudatoolkit</td>
-<td style="text-align:left">10.0.130</td>
-<td style="text-align:left">9.0</td>
-<td style="text-align:left">8.0</td>
-</tr>
-<tr>
-<td style="text-align:left">cudnn</td>
-<td style="text-align:left">7.3.1</td>
-<td style="text-align:left">7.1.2</td>
-<td style="text-align:left">7.1.3</td>
-</tr>
-<tr>
-<td style="text-align:left">python</td>
-<td style="text-align:left">3.7.3</td>
-<td style="text-align:left">3.6.8</td>
-<td style="text-align:left">3.6.8</td>
-</tr>
-<tr>
-<td style="text-align:left">结果</td>
-<td style="text-align:left">compare.py：成功<br>validate_on_lfw.py：失败</td>
-<td style="text-align:left">compare.py：失败<br>validate_on_lfw.py：成功</td>
-<td style="text-align:left">无法调用GPU<br>CPU运行两个文件均成功</td>
-</tr>
-</tbody>
-</table>
-</div>
+</li>
+<li><p>Back-End</p>
 <ul>
-<li>代码需要修改的地方：</li>
+<li><p>TreeMap的floorEntry特性？</p>
+<p>&emsp;答：在方法调用返回的最大键小于等于key，或者null，如果不存在这样的键的条目。</p>
+</li>
+<li><p>Es聚合如何返回对象？</p>
+<p>&emsp;答：无解。</p>
+<p>​    替代法：用查询返回结果map，并用groupby处理。</p>
+</li>
+<li><p>cannot write type[class.xxx.SomeObject]</p>
+<p>&emsp;答：Es实体类的属性类型定义错误，正常情况下应该是FieldType.Object。</p>
+</li>
+<li><p>Es如何判断列表为null或者[]？</p>
+<p>&emsp;答：exists。</p>
+</li>
+<li><p>JsonMappingException(was java.lang.NullException)</p>
+<p>&emsp;答：较多情况是parallelStream引起的，根据异常提示的相关集合进行排查。</p>
+<p>​    可能情况一：多线程里进行不安全的增删操作。</p>
+<p>​    可能情况二：集合中属性的类型定义错误。</p>
+</li>
+<li><p>application.properties如何设置布尔值？</p>
+<p>&emsp;答：使用spel，定义boolean变量：@Value(“${some.key:true}”)。</p>
+</li>
+<li><p>Es使用scroll查询时，出现no search context for id [xxx]的问题？</p>
+<p>&emsp;答：设置scroll时间长一些。</p>
+</li>
+<li><p>Failed to bind properties under ‘’ to com.zaxxer.hikari.HikariDataSource问题？</p>
+<p>&emsp;答：在application.properties中添加spring.datasource.driver_class_name=com.mysql.jdbc.privider。</p>
+</li>
+<li><p>SQL如何判空？</p>
+<p>&emsp;答：where ooxx is null or trim(ooxx) = ‘’;</p>
+</li>
+<li><p>@Qualifier的作用？</p>
+<p>&emsp;答：使用@Autowired注释进行byType注入，使用@Qualifier是byName（通过id）方式注入。一般在候选Bean数目不为1时应该加@Qualifier注释。添加@Qualifier注解，需要注意的是@Qualifier的参数名称必须为相关@Service注解的类名之一！</p>
+<p>​    另：@Resource默认是byName方式注入。如果设置了type，则按byType方式注入。如果同时设置了name和type，则查找唯一匹配的bean，否则抛异常。</p>
+</li>
+<li><p>Attempted read from closed stream的问题？</p>
+<p>&emsp;答：EntityUtils.toString(HttpEntity)在每个方法中只能使用一次。</p>
+</li>
 </ul>
-<p>&emsp;&emsp;但凡需要用到GPU的地方都加上：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># session中</span></span><br><span class="line">gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=args.gpu_memory_fraction)</span><br><span class="line">                  sess = tf.Session(</span><br><span class="line">                         config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=<span class="literal">False</span>))</span><br><span class="line"><span class="comment"># parse_arguments(argv)中</span></span><br><span class="line">parser.add_argument(<span class="string">'--gpu_memory_fraction'</span>, type=float,</span><br><span class="line">                        help=<span class="string">'Upper bound on the amount of GPU memory that will be used by the process.'</span>, default=<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;facenet.py中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># create_input_pipeline(input_queue, image_size, nrof_preprocess_threads, batch_size_placeholder)中，所有代码都缩进到scope内。</span></span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'tempscope'</span>):</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;detect_face.py中：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 87行附近，添加allow_pickle=True。</span></span><br><span class="line">data_dict = np.load(data_path, allow_pickle=<span class="literal">True</span>, encoding=<span class="string">'latin1'</span>).item()  <span class="comment"># pylint: disable=no-member</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>坑一：</li>
+</li>
 </ul>
-<blockquote>
-<p>Attempting to use uninitialized value InceptionResnetV1/Repeat_1/block17_4/Branch_1/Conv2d_0b_1x7/weights</p>
-</blockquote>
-<p>&emsp;&emsp;解决方案：启动参数设置成具体的模型.pb文件。如果设置成文件夹，程序会使用ckpt和meta文件，于是就会出现各种Attempting to use uninitialized value的情况。</p>
-<ul>
-<li>坑二：</li>
-</ul>
-<blockquote>
-<p>Loaded runtime CuDNN library: 7600 (compatibility version 7600) but source was compiled with 7102 (compatibility version 7100). If using a binary install, upgrade your CuDNN library to match. If building from sources, make sure the library loaded at runtime matches a compatible version specified during compile configuration.</p>
-</blockquote>
-<p>&emsp;&emsp;解决方案：将cudnn版本降至7.1.2。Milo在Anaconda环境中尝试了各种版本，其中7.1.3和7.0.5不会报这个错，但是7.1.3会自动安装CUDA8.0版本，7.0.5又会出现其他异常，所以在Milo的电脑上只能选择7.1.2版本。</p>
-<ul>
-<li>坑三：</li>
-</ul>
-<blockquote>
-<p>Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA</p>
-</blockquote>
-<p>&emsp;&emsp;解决方案：下载官方Tensorflow源文件进行重新编译和安装。(在此，Milo未做处理，因为这是个Warning，当时只做了方案查询，还有大坑需要填。)</p>
-<ul>
-<li>坑四：</li>
-</ul>
-<blockquote>
-<p>freeze_graph.py用途</p>
-</blockquote>
-<p>&emsp;&emsp;总结：在长时间无法解决&gt;&gt;坑二&lt;&lt;的情况下，总感觉应该寻找载入参数的办法。这和常规Python开发真的有很大不同，正常情况下在命令行自定义参数即可，可这是神经网络的参数，如何将模型中的参数载入呢？山穷水复疑无路，柳暗花明又一村！Milo搜索了freeze_graph.py的用途，发现训练好的模型正是通过此文件将参数整合到模型中，最终生成.pb文件。所以，&gt;&gt;坑二&lt;&lt;顺其自然地解决了！</p>
-<ul>
-<li>坑五：</li>
-</ul>
-<blockquote>
-<p>could not create cudnn handle: CUDNN_STATUS_INTERNAL_ERROR</p>
-</blockquote>
-<p>&emsp;&emsp;实际情况一：当tensorflow-gpu版本&gt;1.8时就会出现这个异常。</p>
-<p>&emsp;&emsp;实际情况二：看到CUDNN_OOXX_OOXX时，在代码中设置session的gpu_options可以解决部分问题。</p>
-<ul>
-<li>坑六：</li>
-</ul>
-<blockquote>
-<p>InternalError (see above for traceback): Blas SGEMM launch failed</p>
-</blockquote>
-<p>&emsp;&emsp;总结：要么显卡太新，要么CUDNN版本问题。</p>
+<h4 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h4><ol>
+<li>Jsp 500的问题，可以从页面源代码看到问题点在哪。</li>
+<li>后端尽量不要返回null对象或者设置null对象，避免前端抛null异常。</li>
+<li>ElasticTemplate.save()如果有id会部分更新，如果没有id会创建新对象。</li>
+<li>前端使用this.$set(item, key, value)可能会有属性冲突的风险，前后端分离需要规范命名。</li>
+<li>分布式需要考虑：锁、一致性、偷取任务时前后依赖等问题。</li>
+<li>可以使用stream().sorted()进行排序。</li>
+<li>使用BeanUtils.copyProperties拷贝对象需要注意两点：一是导入哪个包，对应参数顺序；另一个是部分属性未拷贝，需要手动设置，例如：id。</li>
+<li>可以使用SearchSourceBuilder.fetchSource和SearchQuery.withFields指定返回字段。</li>
+<li>SearchSourceBuilder.from(0).size(0)如果是查询solr，默认最多返回100条数据。</li>
+<li>Excel模板设置数据有效性时，使用OFFSET($sheet.$A$1,,1,COUNTA($sheet$1:$n))函数可以选择某行非空的值，选择某列非空值类似。</li>
+<li>使用DateHistogramAggregationBuilder.format(“yyyy-MM-dd”)可以直接对时间属性进行格式化。</li>
+<li>如果使用HTTP的Get方式请求接口，参数设置成long类型会报错，因为String无法转换成long。改用Post方式请求可以解决。</li>
+</ol>
 
     </div>
 
@@ -373,9 +342,10 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/AI/" rel="tag"># AI</a>
-              <a href="/tags/FaceNet/" rel="tag"># FaceNet</a>
-              <a href="/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+              <a href="/tags/FAQ/" rel="tag"># FAQ</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Springboot/" rel="tag"># Springboot</a>
           </div>
 
         
@@ -384,13 +354,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/05/11/%E7%94%A8CNN%E5%AE%9E%E7%8E%B0Digit-Reconizer%E6%80%BB%E7%BB%93/" rel="prev" title="用CNN实现Digit Reconizer总结">
-      <i class="fa fa-chevron-left"></i> 用CNN实现Digit Reconizer总结
+    <a href="/2020/06/15/Java%E5%AE%9E%E7%8E%B0%E5%9B%BD%E5%AF%86Sm3%E7%AE%97%E6%B3%95/" rel="prev" title="Java实现国密Sm3算法">
+      <i class="fa fa-chevron-left"></i> Java实现国密Sm3算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/11/23/Java%E5%AE%9E%E7%8E%B0%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="next" title="Java实现常用排序算法">
-      Java实现常用排序算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -450,7 +417,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">问题总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">经验总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -591,59 +558,6 @@
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
